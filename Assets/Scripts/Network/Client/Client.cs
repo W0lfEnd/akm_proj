@@ -5,8 +5,8 @@ using static WebSocketPlugin;
 
 public class Client : MonoBehaviour
 {
-    [SerializeField] private TextMeshPro txtIP;
-    [SerializeField] private TextMeshPro txtPort;
+    [SerializeField] private TMP_InputField txtIP;
+    [SerializeField] private TMP_InputField txtPort;
 
     private WebSocketPlugin _client;
     private PacketHandlerManager _packetHandlerManager;

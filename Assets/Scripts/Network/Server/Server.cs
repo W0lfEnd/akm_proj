@@ -6,9 +6,10 @@ using WebSocketSharp.Server;
 
 public class Server : MonoBehaviour, ISubscriber
 {
-    [SerializeField] private TextMeshPro txtIP;
-    [SerializeField] private TextMeshPro txtPort;
-    [SerializeField] private TextMeshPro txtMaxPlayerCount;
+    [SerializeField] private TMP_InputField txtIP; 
+    [SerializeField] private TMP_InputField txtPort;
+    [SerializeField] private TMP_InputField txtMaxPlayerCount;
+    [SerializeField] private Client client;
 
     private WebSocketServer _server;
     private static List<ClientInfo> _clients;
@@ -35,6 +36,8 @@ public class Server : MonoBehaviour, ISubscriber
 
         _server.AddWebSocketService<GameWebSocketBehavior>($"/{CommonConstants.DefaultHostName}");
         _server.Start();
+
+        client.Connect();
 
         Debug.Log("Server started");
     }
