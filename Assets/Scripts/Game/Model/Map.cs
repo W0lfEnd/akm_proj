@@ -13,10 +13,10 @@ namespace Model
         {
             coords = new Vector2Int[]
             {
-                new Vector2Int(),
-                new Vector2Int(),
-                new Vector2Int(),
-                new Vector2Int()
+                new Vector2Int(0, 0),
+                new Vector2Int(6000, 6000),
+                new Vector2Int(4500, 7500),
+                new Vector2Int(3000, 8000)
             };
 
             meteorsData = GenerateMeteors();
@@ -24,22 +24,6 @@ namespace Model
 
         private MeteorData[] GenerateMeteors()
         {
-            List<byte> ShuffleList(List<int> inputList)
-            {
-                List<byte> randomList = new List<byte>();
-
-                var r = new System.Random();
-                int randomIndex = 0;
-                while (inputList.Count > 0)
-                {
-                    randomIndex = r.Next(0, inputList.Count);
-                    randomList.Add((byte)inputList[randomIndex]);
-                    inputList.RemoveAt(randomIndex);
-                }
-
-                return randomList;
-            }
-
             byte[] createCombo(int meteorSize)
             {
                 var size = 4;
@@ -53,9 +37,7 @@ namespace Model
                     size = 6;
                 }
 
-                var combo = Enumerable.Range(0, size + 1).ToList();
-
-                return ShuffleList(combo).ToArray();
+                return Util.ShuffleList(10, 15).Take(size).ToArray();
             }
 
             var data = new MeteorData[100];

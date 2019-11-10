@@ -63,6 +63,7 @@ public class PacketFactory
     private static void saveModelToPacket(Packet packet, GameModel model)
     {
         packet.Buffer.Write((byte)model.gameState);
+        packet.Buffer.Write(model.currentTime);
         packet.Buffer.Write(model.health);
         packet.Buffer.Write(model.shield);
         packet.Buffer.Write(model.oxygen);
@@ -74,11 +75,18 @@ public class PacketFactory
         packet.Buffer.Write(model.targetPosition.x);
         packet.Buffer.Write(model.targetPosition.y);
 
+        packet.Buffer.Write(model.startCombo[0]);
+        packet.Buffer.Write(model.startCombo[1]);
+        packet.Buffer.Write(model.startCombo[2]);
+        packet.Buffer.Write(model.startCombo[3]);
+
+        packet.Buffer.Write(model.iteration);
+
         packet.Buffer.Write((byte)model.panels.Length);
         for (int i = 0; i < model.panels.Length; i++)
         {
             packet.Buffer.Write(model.panels[i].id);
-            packet.Buffer.Write(model.panels[i].isUsed);
+            packet.Buffer.Write(model.panels[i].ownerId);
 
             packet.Buffer.Write((byte)model.panels[i].inputElements.Length);
             for (int j = 0; j < model.panels[i].inputElements.Length; j++)
@@ -94,6 +102,7 @@ public class PacketFactory
 
     private static void savePalyerInput(Packet packet, PlayerInput playerInput)
     {
+        packet.Buffer.Write(playerInput.ownerId);
         packet.Buffer.Write((byte)playerInput.actionType);
         packet.Buffer.Write(playerInput.panelId);
         packet.Buffer.Write(playerInput.inputElementId);

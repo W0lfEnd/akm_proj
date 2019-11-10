@@ -6,6 +6,7 @@
         PressButton
     }
 
+    public int ownerId;
     public ActionType actionType;
     public byte panelId;
     public byte inputElementId;

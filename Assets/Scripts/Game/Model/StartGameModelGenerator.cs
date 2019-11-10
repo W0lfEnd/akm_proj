@@ -18,6 +18,9 @@ namespace Model
                 curPosition = new Vector2Int(0, 0),
                 targetPosition = new Vector2Int(0, 0),
                 speed = 0,
+                startCombo = Util.ShuffleList(0, 4).ToArray(),
+                currentTime = 0,
+                iteration = 0
             };
 
             model.panels = new Panel[countPanel];
@@ -34,7 +37,8 @@ namespace Model
         {
             Panel panel = new Panel
             {
-                id = id
+                id = id,
+                ownerId = -1
             };
 
             return panel;
@@ -93,6 +97,7 @@ namespace Model
                     inputValue = 0,
                     maxValue = 1
                 },
+
                 new InputElement
                 {
                     id = 10,
