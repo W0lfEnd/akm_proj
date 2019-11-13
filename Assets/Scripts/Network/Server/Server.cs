@@ -17,6 +17,9 @@ public class Server : MonoBehaviour, ISubscriber
     private PacketHandlerManager _packetHandlerManager;
     private bool _isRun;
     private byte _maxPlayerCount;
+    private GameController _gameController;
+
+    public GameController GameController => _gameController;
 
     public void Run()
     {
@@ -38,6 +41,8 @@ public class Server : MonoBehaviour, ISubscriber
         _server.Start();
 
         client.Connect();
+
+        _gameController = new GameController();
 
         Debug.Log("Server started");
     }

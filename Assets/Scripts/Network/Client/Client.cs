@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using TMPro;
 using UnityEngine;
 using static WebSocketPlugin;
@@ -7,6 +8,9 @@ public class Client : MonoBehaviour
 {
     [SerializeField] private TMP_InputField txtIP;
     [SerializeField] private TMP_InputField txtPort;
+
+    public GameModel GameModel { get; set; }
+    public Map Map { get; set; }
 
     private WebSocketPlugin _client;
     private PacketHandlerManager _packetHandlerManager;
