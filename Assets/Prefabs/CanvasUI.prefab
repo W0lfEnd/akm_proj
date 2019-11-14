@@ -559,6 +559,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShipPlanTab
       objectReference: {fileID: 0}
+    - target: {fileID: 5649827168397382896, guid: dafd71d1f3c8c8d40a5ac745d4afbb5d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7259813805126566071, guid: dafd71d1f3c8c8d40a5ac745d4afbb5d,
         type: 3}
       propertyPath: m_LocalPosition.x
