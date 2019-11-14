@@ -18,7 +18,7 @@ public static class Util
         while (source.Count > 0)
         {
             randomIndex = r.Next(0, source.Count);
-            randomList.Add((byte)source[randomIndex]);
+            randomList.Add(source[randomIndex]);
             source.RemoveAt(randomIndex);
         }
 

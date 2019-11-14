@@ -11,7 +11,6 @@ public class Server : MonoBehaviour, ISubscriber
     [SerializeField] private TMP_InputField txtMaxPlayerCount;
     [SerializeField] private Client client;
 
-
     private WebSocketServer _server;
     private static List<ClientInfo> _clients;
     private PacketHandlerManager _packetHandlerManager;
@@ -29,7 +28,7 @@ public class Server : MonoBehaviour, ISubscriber
         }
 
         var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonConstants.DefaultIPAddress : txtIP.text;
-        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? "4444" : txtPort.text;
+        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonConstants.DefaultPort : txtPort.text;
         _maxPlayerCount = txtMaxPlayerCount == null || string.IsNullOrWhiteSpace(txtMaxPlayerCount.text) ? (byte)1 : System.Convert.ToByte(txtMaxPlayerCount);
 
         var uri = $"ws://{host}:{port}";
@@ -74,6 +73,9 @@ public class Server : MonoBehaviour, ISubscriber
         if (_clients.Count < _maxPlayerCount)
         {
             _clients.Add(clientInfo);
+            clientInfo.Socket.Send(PacketFactory.CreatePacketByType(PacketType.S2C_SendId, 1000 + _clients.Count).GetData());
+            clientInfo.Socket.Send(PacketFactory.CreatePacketByType(PacketType.S2C_Map, _gameController.GetMap()).GetData());
+            clientInfo.Socket.Send(PacketFactory.CreatePacketByType(PacketType.S2C_Model, _gameController.GetModel()).GetData());
         }
         clientInfo.Socket.Close(CloseStatusCode.TooBig);
     }
