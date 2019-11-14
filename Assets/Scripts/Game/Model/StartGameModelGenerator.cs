@@ -18,10 +18,10 @@ namespace Model
                 curPosition = new Vector2Int(0, 0),
                 targetPosition = new Vector2Int(0, 0),
                 speed = 0,
-                startCombo = Util.ShuffleList(0, 4).ToArray(),
                 currentTime = 0,
                 iteration = 0
             };
+            model.startCombo = Util.ShuffleList(0, 4).ToArray();
 
             model.panels = new Panel[countPanel];
 

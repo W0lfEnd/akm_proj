@@ -29,7 +29,7 @@ public class Server : MonoBehaviour, ISubscriber
         }
 
         var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonConstants.DefaultIPAddress : txtIP.text;
-        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonConstants.DefaultPort : txtPort.text;
+        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? "4444" : txtPort.text;
         _maxPlayerCount = txtMaxPlayerCount == null || string.IsNullOrWhiteSpace(txtMaxPlayerCount.text) ? (byte)1 : System.Convert.ToByte(txtMaxPlayerCount);
 
         var uri = $"ws://{host}:{port}";
