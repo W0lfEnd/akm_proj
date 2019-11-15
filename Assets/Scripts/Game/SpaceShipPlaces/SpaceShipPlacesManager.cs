@@ -16,6 +16,7 @@ public class SpaceShipPlacesManager : MonoBehaviour
   public void changePlace( int idx_of_place )
   {
     changeColorPlace( idx_of_place );
+    Client.
   }
 
   private void changeColorPlace( int idx_of_place )

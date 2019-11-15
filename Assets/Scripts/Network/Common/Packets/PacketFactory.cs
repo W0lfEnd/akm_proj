@@ -15,7 +15,7 @@ public class PacketFactory
                     throw new Exception($"{nameof(context)} is not type {nameof(Map)}");
                 }
                 saveMapToPacket(packet, map);
-                return packet;
+                break;
             case PacketType.S2C_Model:
                 var model = context as GameModel;
                 if (model == null)
@@ -23,7 +23,7 @@ public class PacketFactory
                     throw new Exception($"{nameof(context)} is not type {nameof(GameModel)}");
                 }
                 saveModelToPacket(packet, model);
-                return packet;
+                break;
             case PacketType.C2S_Input:
                 var playerInput = context as PlayerInput;
                 if (playerInput == null)
@@ -31,10 +31,18 @@ public class PacketFactory
                     throw new Exception($"{nameof(context)} is not type {nameof(PlayerInput)}");
                 }
                 savePalyerInput(packet, playerInput);
-                return packet;
-        }
+                break;
+            case PacketType.S2C_SendId:
+                if (!int.TryParse( context.ToString(), out int id))
+                {
+                    
+                }
+                packet.Buffer.Write(id);
+                break;
+            default: throw new Exception("NotSuported type of packet");
 
-        throw new Exception("NotSuported type of packet");
+        }
+        return packet;
     }
 
     private static void saveMapToPacket(Packet packet, Map map)

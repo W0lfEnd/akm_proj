@@ -1,16 +1,28 @@
-﻿using System;
+﻿using Model;
+using System;
 using TMPro;
 using UnityEngine;
 using static WebSocketPlugin;
 
-public class Client : MonoBehaviour
+public class Client : MonoBehaviour, IClient
 {
     [SerializeField] private TMP_InputField txtIP;
     [SerializeField] private TMP_InputField txtPort;
 
+    public static IClient client;
+
+    public GameModel Model { get; set; }
+    public Map Map { get; set; }
+    public int Id { get; set; }
+
     private WebSocketPlugin _client;
     private PacketHandlerManager _packetHandlerManager;
     private bool _isConnected;
+
+    public void Send(PlayerInput playerInput)
+    {
+        _client.Send(PacketFactory.CreatePacketByType(PacketType.C2S_Input, playerInput).GetData());
+    }
 
     public void Connect()
     {
@@ -51,6 +63,10 @@ public class Client : MonoBehaviour
 
     private void Awake()
     {
+        if (client == null)
+        {
+            client = this;
+        }
         _isConnected = false;
         _packetHandlerManager = new PacketHandlerManager();
     }

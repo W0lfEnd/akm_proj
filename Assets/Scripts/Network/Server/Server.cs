@@ -11,12 +11,14 @@ public class Server : MonoBehaviour, ISubscriber
     [SerializeField] private TMP_InputField txtMaxPlayerCount;
     [SerializeField] private Client client;
 
-
     private WebSocketServer _server;
     private static List<ClientInfo> _clients;
     private PacketHandlerManager _packetHandlerManager;
     private bool _isRun;
     private byte _maxPlayerCount;
+    private GameController _gameController;
+
+    public GameController GameController => _gameController;
 
     public void Run()
     {
@@ -38,6 +40,8 @@ public class Server : MonoBehaviour, ISubscriber
         _server.Start();
 
         client.Connect();
+
+        _gameController = new GameController();
 
         Debug.Log("Server started");
     }
@@ -69,6 +73,9 @@ public class Server : MonoBehaviour, ISubscriber
         if (_clients.Count < _maxPlayerCount)
         {
             _clients.Add(clientInfo);
+            clientInfo.Socket.Send(PacketFactory.CreatePacketByType(PacketType.S2C_SendId, 1000 + _clients.Count).GetData());
+            clientInfo.Socket.Send(PacketFactory.CreatePacketByType(PacketType.S2C_Map, _gameController.GetMap()).GetData());
+            clientInfo.Socket.Send(PacketFactory.CreatePacketByType(PacketType.S2C_Model, _gameController.GetModel()).GetData());
         }
         clientInfo.Socket.Close(CloseStatusCode.TooBig);
     }
