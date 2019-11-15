@@ -33,6 +33,7 @@ public class Client : MonoBehaviour, IClient
         _client = new WebSocketPlugin(uri);
         _client.ChangeStateEvent += OnChangeState;
         _client.Connect();
+        print("Clinet connecting ...");
     }
 
     private void OnChangeState(SocketActionState actionState)
@@ -49,6 +50,7 @@ public class Client : MonoBehaviour, IClient
         else if (actionState ==  SocketActionState.OPEN)
         {
             _isConnected = true;
+            print("Clinet connected");
         }
         else if (actionState == SocketActionState.CLOSE)
         {

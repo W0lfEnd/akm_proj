@@ -38,7 +38,7 @@ public class Server : MonoBehaviour, ISubscriber
 
         _server.AddWebSocketService<GameWebSocketBehavior>($"/{CommonConstants.DefaultHostName}");
         _server.Start();
-
+        
         client.Connect();
 
         _gameController = new GameController();
@@ -70,6 +70,7 @@ public class Server : MonoBehaviour, ISubscriber
 
     private void OnConnect(ClientInfo clientInfo)
     {
+        _isRun = true;
         if (_clients.Count < _maxPlayerCount)
         {
             _clients.Add(clientInfo);
@@ -99,5 +100,17 @@ public class Server : MonoBehaviour, ISubscriber
         _clients = new List<ClientInfo>();
 
         _packetHandlerManager = new PacketHandlerManager();
+    }
+
+    private static int iteration = 0;
+    private void FixedUpdate()
+    {
+        if (!_isRun) return;
+        iteration++;
+        if ( iteration == 10)
+        {
+            _gameController.DoIteration(Time.realtimeSinceStartup);
+            iteration = 0;
+        }
     }
 }

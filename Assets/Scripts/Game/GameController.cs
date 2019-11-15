@@ -13,9 +13,11 @@ public class GameController
         ComboBtn3Id = 2,
         ComboBtn4Id = 3,
 
-        ChangeSppedId = 4,
+        RunBtnId = 4,
 
-        PressFire = 5,
+        ChangeSppedId = 5,
+
+        PressFire = 6,
 
         ComboManeuver1Id = 10,
         ComboManeuver2Id = 11,
@@ -29,10 +31,11 @@ public class GameController
     private GameModel _model;
     private Map _map;
     private int _meteorIteration = 0;
+    private float startTime = 0;
 
     public GameController()
     {
-        _model = StartGameModelGenerator.Generate(1, 4);
+        _model = StartGameModelGenerator.Generate(3, 4);
         _model.gameState = GameState.INIT;
 
         _map = new Map();
@@ -45,6 +48,11 @@ public class GameController
             return;
         }
 
+        if (startTime == 0)
+        {
+            startTime = time;
+            _model.currentTime = Convert.ToInt32(time * 1000);
+        }
         // todo: time
         // _model.currentTime = time * 1000 - startTime
         if (Convert.ToInt32(_model.currentTime) == _map.meteorsData[_meteorIteration].timeSeconds)
@@ -105,6 +113,12 @@ public class GameController
         {
             return ChangePanel(playerInput);
         }
+
+        if(playerInput.actionType == PlayerInput.ActionType.ChangeTarget)
+        {
+            _model.targetPosition = playerInput.targetPosition;
+            return true;
+        }
         
         if (!ValidInputElement(playerInput, out InputElement inputElement))
         {
@@ -121,9 +135,15 @@ public class GameController
             case ButtonActionType.ComboBtn4Id:
                 SetRunCombination(inputElement);
                 break;
+            case ButtonActionType.RunBtnId:
+                if (_model.gameState == GameState.PREPARE)
+                {
+                    _model.gameState = GameState.RUN;
+                }
+                break;
             case ButtonActionType.ChangeSppedId:
                 var speed = Convert.ToByte(inputElement.inputValue * 10);
-                if(speed > MAX_VALUE || speed < 0)
+                if(_model.gameState == GameState.RUN && (speed > MAX_VALUE || speed < 0))
                 {
                     return false;
                 }
@@ -181,6 +201,10 @@ public class GameController
 
     private bool SetRunCombination(InputElement inputElement)
     {
+        if (_model.gameState == GameState.RUN)
+        {
+            return true;
+        }
         List<InputElement> inputs = new List<InputElement>();
         for (int i = 0; i < _model.panels.Length; i++)
         {

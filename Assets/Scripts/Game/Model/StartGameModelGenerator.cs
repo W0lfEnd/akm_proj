@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Model
 {
@@ -25,26 +26,30 @@ namespace Model
 
             model.panels = new Panel[countPanel];
 
+            InputElement[] inputElements = createInputElements();
+
             for (byte i = 0; i < countPanel; i++)
             {
-                model.panels[i] = generatePanel(i, countInputOnPanel);
+                InputElement[] inputs = inputElements.Skip(i * countInputOnPanel).Take(countInputOnPanel).ToArray();
+                model.panels[i] = generatePanel(i, inputs);
             }
 
             return model;
         }
 
-        private static Panel generatePanel(byte id, byte countInputOnPanel)
+        private static Panel generatePanel(byte id, InputElement[] inputElements )
         {
             Panel panel = new Panel
             {
                 id = id,
-                ownerId = -1
+                ownerId = -1,
+                inputElements = inputElements
             };
 
             return panel;
         }
 
-        private static InputElement[] createControlPanel()
+        private static InputElement[] createInputElements()
         {
             return new InputElement[]
             {
@@ -83,7 +88,16 @@ namespace Model
 
                 new InputElement
                 {
-                    id = 4, // speed id
+                    id = 4,
+                    groupId = 2,
+                    inputType = InputType.Button,
+                    inputValue = 0,
+                    maxValue = 1
+                },
+
+                new InputElement
+                {
+                    id = 5, // speed id
                     groupId = 0,
                     inputType = InputType.Slider,
                     inputValue = 0,
@@ -91,7 +105,7 @@ namespace Model
                 },
                 new InputElement // fire id
                 {
-                    id = 5,
+                    id = 6,
                     groupId = 0,
                     inputType = InputType.Button,
                     inputValue = 0,
