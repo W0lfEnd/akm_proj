@@ -7,6 +7,8 @@ public class SpaceShipPlacesManager : MonoBehaviour
 {
   [SerializeField] private Button[] btn_places;
 
+  private TestGameManager testGameManager => TestGameManager.getInstance();
+
   private void Start()
   {
     setAllPlacesGreen();
@@ -15,7 +17,11 @@ public class SpaceShipPlacesManager : MonoBehaviour
 
   public void changePlace( int idx_of_place )
   {
+    Debug.Log( $"Ви сіли на {idx_of_place} місце" );
+
     changeColorPlace( idx_of_place );
+    testGameManager.setPlayerPlace( idx_of_place );
+    gameObject.SetActive( false );// Тушим панель
   }
 
   private void changeColorPlace( int idx_of_place )
