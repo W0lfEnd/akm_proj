@@ -3,10 +3,10 @@ using System.Linq;
 
 public static class Util
 {
-    public static List<byte> ShuffleList(byte start, byte end)
+    public static List<byte> ShuffleList(byte start, byte count)
     {
         List<byte> source = new List<byte>();
-        var range = Enumerable.Range(start, end);
+        var range = Enumerable.Range(start, count);
         foreach (var item in range)
         {
             source.Add((byte)item);

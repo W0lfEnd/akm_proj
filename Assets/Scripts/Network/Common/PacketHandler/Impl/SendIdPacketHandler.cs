@@ -1,5 +1,5 @@
 ﻿using System.IO;
-
+using UnityEngine;
 
 public class SendIdPacketHandler : IPacketHandler
 {
@@ -8,6 +8,7 @@ public class SendIdPacketHandler : IPacketHandler
         if (source is Client client)
         {
             client.Id = reader.ReadInt32();
+            Debug.Log($"SendIdPacketHandler: {client.Id}");
         }
     }
 }

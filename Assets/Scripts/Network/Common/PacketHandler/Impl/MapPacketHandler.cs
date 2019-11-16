@@ -19,6 +19,8 @@ public class MapPacketHandler : IPacketHandler
                 client.Map.coords[i] = new Vector2Int(x, y);
             }
 
+            Debug.Log("Map coord point count: " + coordsSize);
+
             byte meteorDataCount = reader.ReadByte();
             client.Map.meteorsData = new MeteorData[meteorDataCount];
             for (int i = 0; i < meteorDataCount; i++)
@@ -36,6 +38,8 @@ public class MapPacketHandler : IPacketHandler
 
                 client.Map.meteorsData[i] = new MeteorData { timeSeconds = seconds, size = meteorSize, combo = combo };
             }
+
+            Debug.Log("Map meteor count: " + meteorDataCount);
         }
     }
 }
