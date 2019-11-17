@@ -37,15 +37,16 @@ namespace Model
                     size = 6;
                 }
 
-                return Util.ShuffleList(10, 15).Take(size).ToArray();
+                var result = Util.ShuffleList(10, 6).Take(size).ToArray();
+                return result;
             }
 
-            var data = new MeteorData[100];
+            var data = new MeteorData[5];
             var time = 30;
 
             data[0] = new MeteorData { timeSeconds = time, size = 0, combo = createCombo(0) };
 
-            for (int i = 1; i < 100; i++)
+            for (int i = 1; i < data.Length; i++)
             {
                 var random = new System.Random();
                 var meteorSize = random.Next(0, 3);

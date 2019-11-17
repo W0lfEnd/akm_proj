@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using UnityEngine;
 
 public class PlayerInputPacketHandler : IPacketHandler
 {
@@ -12,7 +13,8 @@ public class PlayerInputPacketHandler : IPacketHandler
                 actionType = (PlayerInput.ActionType)reader.ReadByte(),
                 panelId = reader.ReadByte(),
                 inputElementId = reader.ReadByte(),
-                inputValue = reader.ReadByte()
+                inputValue = reader.ReadByte(),
+                targetPosition = new Vector2Int( reader.ReadInt32(), reader.ReadInt32())
             };
 
             server.GameController.ApplyPlayerInput(playerInput);

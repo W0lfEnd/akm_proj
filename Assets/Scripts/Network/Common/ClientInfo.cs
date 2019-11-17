@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Lidgren.Network;
+using System.Net;
 using WebSocketSharp;
 
 public class ClientInfo
@@ -7,6 +8,7 @@ public class ClientInfo
     public ushort Port;
     public WebSocket Socket;
     public string ConnectionId;
+    public NetConnection NetConnection;
 
     public override bool Equals(object obj)
     {
