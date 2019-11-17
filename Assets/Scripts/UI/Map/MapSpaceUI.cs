@@ -30,9 +30,12 @@ public class MapSpaceUI : MonoBehaviourBase
     }
   }
 
+  
   public void OnEnable()
   {
     initComponents();
+    
+    img_ship.transform.localPosition = fromServerCoords( Client.client.Model.curPosition );
   }
 
 
