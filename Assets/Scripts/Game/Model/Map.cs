@@ -9,14 +9,15 @@ namespace Model
         public MeteorData[] meteorsData;
         public Vector2Int[] coords;
 
+        public const int MAP_SIZE = 5000;
         public Map()
         {
             coords = new Vector2Int[]
             {
-                new Vector2Int(0, 0),
-                new Vector2Int(6000, 6000),
-                new Vector2Int(4500, 7500),
-                new Vector2Int(3000, 8000)
+                new Vector2Int( MAP_SIZE / 5, MAP_SIZE / 5 ),
+                new Vector2Int( MAP_SIZE / 8, MAP_SIZE / 10 ),
+                new Vector2Int( MAP_SIZE / 3, MAP_SIZE / 6 ),
+                new Vector2Int( MAP_SIZE / 54, MAP_SIZE / 23 )
             };
 
             meteorsData = GenerateMeteors();
