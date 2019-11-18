@@ -43,6 +43,8 @@ public class GameController
 
     public void DoIteration(float time)
     {
+        _model.gameState = GameState.RUN;
+
         if (_model.gameState == GameState.RUN)
         {
             return;
