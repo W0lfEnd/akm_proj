@@ -40,17 +40,19 @@ public class GameModelPacketHandler : IPacketHandler
 
             for (int i = 0; i < panelCount; i++)
             {
-                client.Model.panels[i].id = reader.ReadByte();
-                client.Model.panels[i].ownerId = reader.ReadInt32();
+                var panel = new Panel();
+
+                panel.id = reader.ReadByte();
+                panel.ownerId = reader.ReadInt32();
                 byte elementCount = reader.ReadByte();
-                if (client.Model.panels[i].inputElements == null)
+                if (panel.inputElements == null)
                 {
-                    client.Model.panels[i].inputElements = new InputElement[elementCount];
+                    panel.inputElements = new InputElement[elementCount];
                 }
 
                 for (int j = 0; j < elementCount; j++)
                 {
-                    client.Model.panels[i].inputElements[j] = new InputElement
+                    panel.inputElements[j] = new InputElement
                     {
                         inputType = (InputType)reader.ReadByte(),
                         id = reader.ReadByte(),
@@ -59,6 +61,7 @@ public class GameModelPacketHandler : IPacketHandler
                         inputValue = reader.ReadByte()
                     };
                 }
+                client.Model.panels[i] = panel;
             }
         }
     }

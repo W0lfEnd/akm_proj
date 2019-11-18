@@ -1,9 +1,12 @@
-﻿public class PlayerInput
+﻿using UnityEngine;
+
+public class PlayerInput
 {
     public enum ActionType : byte
     {
         ChangePanel,
-        PressButton
+        PressButton,
+        ChangeTarget
     }
 
     public int ownerId;
@@ -11,4 +14,5 @@
     public byte panelId;
     public byte inputElementId;
     public byte inputValue;
+    public Vector2Int targetPosition;
 }

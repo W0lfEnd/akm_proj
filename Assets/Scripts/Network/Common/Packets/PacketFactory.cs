@@ -115,5 +115,7 @@ public class PacketFactory
         packet.Buffer.Write(playerInput.panelId);
         packet.Buffer.Write(playerInput.inputElementId);
         packet.Buffer.Write(playerInput.inputValue);
+        packet.Buffer.Write(playerInput.targetPosition.x);
+        packet.Buffer.Write(playerInput.targetPosition.y);
     }
 }

@@ -55,7 +55,7 @@ public class WebSocketPlugin
 	bool m_IsConnected = false;
 	string m_Error = null;
 
-    public void Connect(string nickname = null)
+    public void Connect()
 	{
 		var builder = new UriBuilder(_mUrl);
 		_mUrl = builder.Uri;
