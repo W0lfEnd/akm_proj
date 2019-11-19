@@ -139,7 +139,6 @@ public class Server : MonoBehaviour//, ISubscriber
             case NetIncomingMessageType.Data:
                 Debug.Log("Data");
                 _packetHandlerManager.RunPacketHandler(message.Data, this);
-                //Receive(message.Data);
                 break;
             case NetIncomingMessageType.StatusChanged:
                 Debug.Log("StatusChanged");
@@ -181,10 +180,6 @@ public class Server : MonoBehaviour//, ISubscriber
 
     private void Awake()
     {
-        //SimpleEventBus.SubscribeOnEvent(TopicType.ServiceToServer, EventType.WebSocketDataConnceted, this);
-        //SimpleEventBus.SubscribeOnEvent(TopicType.ServiceToServer, EventType.WebSocketDataDisconnceted, this);
-        //SimpleEventBus.SubscribeOnEvent(TopicType.ServiceToServer, EventType.WebSocketDataReceived, this);
-
         _clients = new List<ClientInfo>();
 
         _packetHandlerManager = new PacketHandlerManager();
@@ -201,6 +196,11 @@ public class Server : MonoBehaviour//, ISubscriber
             _gameController.DoIteration(Time.realtimeSinceStartup);
             iteration = 0;
             Debug.Log( "Iterate successful" );
+            var messageModel = _server.CreateMessage();
+            var packetModel = PacketFactory.CreatePacketByType(PacketType.S2C_Model, _gameController.GetModel());
+            messageModel.Write(packetModel.GetData());
+            _server.SendToAll(messageModel, NetDeliveryMethod.ReliableOrdered);
+            packetModel.Dispose();
         }
     }
 }
