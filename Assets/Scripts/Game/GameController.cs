@@ -57,7 +57,7 @@ public class GameController
         }
         // todo: time
         // _model.currentTime = time * 1000 - startTime
-        if (Convert.ToInt32(_model.currentTime) == _map.meteorsData[_meteorIteration].timeSeconds)
+        if (Convert.ToInt32(_model.currentTime.Value) == _map.meteorsData[_meteorIteration].timeSeconds)
         {
             var combo = _map.meteorsData[_meteorIteration].combo;
             var result = new bool[combo.Length];
@@ -97,6 +97,8 @@ public class GameController
         {
             DecreaseOxygen();
         }
+
+        moveShipToTarget();
     }
 
     public Map GetMap()
@@ -107,6 +109,12 @@ public class GameController
     public GameModel GetModel()
     {
         return _model;
+    }
+
+    private void moveShipToTarget()
+    {
+        Vector2 res_in_float = Vector2.MoveTowards( _model.curPosition.Value, _model.targetPosition.Value, Time.fixedDeltaTime * 10 * _model.speed.Value );
+        _model.curPosition.Value = new Vector2Int( (int)res_in_float.x, (int)res_in_float.y );
     }
 
     public bool ApplyPlayerInput(PlayerInput playerInput)

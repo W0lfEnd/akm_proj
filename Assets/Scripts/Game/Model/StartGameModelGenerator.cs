@@ -18,7 +18,7 @@ namespace Model
                 health         = new ObservedValue<byte>( startValue ),
                 curPosition    = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
                 targetPosition = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
-                speed          = new ObservedValue<byte>( 0 ),
+                speed          = new ObservedValue<byte>( 100 ),//TODO remove hardcoded speed by dynamicly changed
                 currentTime    = new ObservedValue<int>( 0 ),
                 iteration      = new ObservedValue<int>( 0 )
             };

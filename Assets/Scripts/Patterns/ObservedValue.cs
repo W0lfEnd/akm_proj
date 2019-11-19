@@ -6,7 +6,7 @@ public class ObservedValue<T>
   private T cur_value;
   public  T last_value { get; private set; }
 
-  public event Action onValueChange;
+  public event Action<T> onValueChange;
 
 
   public ObservedValue( T init_value )
@@ -30,7 +30,7 @@ public class ObservedValue<T>
       last_value = cur_value;
       cur_value = value;
 
-      onValueChange?.Invoke();
+      onValueChange?.Invoke( cur_value );
     }
   }
 
