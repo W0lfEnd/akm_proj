@@ -196,10 +196,11 @@ public class Server : MonoBehaviour//, ISubscriber
     {
         if (!_isRun) return;
         iteration++;
-        if ( iteration == 10)
+        if ( iteration >= 10)
         {
             _gameController.DoIteration(Time.realtimeSinceStartup);
             iteration = 0;
+            Debug.Log( "Iterate successful" );
         }
     }
 }

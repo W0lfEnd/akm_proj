@@ -45,7 +45,7 @@ public class GameController
     {
         _model.gameState.Value = GameState.RUN;
 
-        if (_model.gameState.Value == GameState.RUN)
+        if (_model.gameState.Value != GameState.RUN)
         {
             return;
         }

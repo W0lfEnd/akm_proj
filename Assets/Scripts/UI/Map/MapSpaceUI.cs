@@ -24,18 +24,20 @@ public class MapSpaceUI : MonoBehaviourBase
       MapSpaceLocationPointUI location_script = Instantiate( location_prefab, rect_space_map_background.transform ).GetComponent<MapSpaceLocationPointUI>();
       location_script.transform.localPosition = fromServerCoords( location );
       location_script.onLocationClicked += onLocationClicked;
-      location_script.init();
+      location_script.init( location, false );
 
       location_points.Add( location_script );
     }
+
+    onLocationClicked( location_points[0] );//this is temp start choose location, todo delete
   }
 
   
   public void OnEnable()
   {
     initComponents();
-    
-    img_ship.transform.localPosition = fromServerCoords( Client.client.Model.curPosition.Value );
+
+    onShipMoved( Client.client.Model.curPosition.Value );
   }
 
 
@@ -43,16 +45,11 @@ public class MapSpaceUI : MonoBehaviourBase
   {
     target_location = location;
     foreach ( MapSpaceLocationPointUI l in location_points )
-      l.init( l == location );
-  }
+      l.isSelected = l == location;
 
-  private void Update()
-  {
-    if ( !was_inited_components )
-      return;
-
-    img_ship.transform.localPosition = fromServerCoords( Client.client.Model.curPosition.Value );
     drawShipToTargetConnector();
+    
+    Client.client.Send( new PlayerInput{ actionType = PlayerInput.ActionType.ChangeTarget, ownerId = Client.client.Id} );
   }
 
   private void drawShipToTargetConnector()
@@ -63,6 +60,13 @@ public class MapSpaceUI : MonoBehaviourBase
 
     img_ship_to_target_connector.transform.position = img_ship.transform.position;
     img_ship_to_target_connector.rectTransform.sizeDelta = new Vector2( img_ship_to_target_connector.rectTransform.sizeDelta.x, Vector2.Distance( img_ship.transform.position, target_location.transform.position ) );
+  }
+
+
+  private void onShipMoved( Vector2Int server_ship_coords )
+  {
+    img_ship.transform.localPosition = fromServerCoords( server_ship_coords );
+    drawShipToTargetConnector();
   }
 
   private Vector2 fromServerCoords( Vector2Int server_coords )
