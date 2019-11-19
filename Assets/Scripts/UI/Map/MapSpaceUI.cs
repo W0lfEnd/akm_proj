@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class MapSpaceUI : MonoBehaviourBase
 {
+  [SerializeField] private ShipViewManager ship_view;
+  [Space]
   [SerializeField] private Image         img_ship;
   [SerializeField] private RectTransform rect_space_map_background;
   [SerializeField] private Image         img_ship_to_target_connector;
@@ -35,6 +37,7 @@ public class MapSpaceUI : MonoBehaviourBase
     onLocationClicked( location_points[0] ); //this is temp start choose location, todo delete
     Client.client.Model.curPosition   .onValueChange += onShipMoved;
     Client.client.Model.targetPosition.onValueChange += onLocationChanged;
+    Client.client.Model.speed.onValueChange += new_speed => ship_view.speed_parallax = new_speed / 50.0f;
   }
 
 
@@ -71,7 +74,9 @@ public class MapSpaceUI : MonoBehaviourBase
 
   private void updateShipRotation()
   {
-    img_ship.transform.rotation = img_ship.transform.position.lookAtIn2D( target_location.transform.position );
+    Quaternion rotation = img_ship.transform.position.lookAtIn2D( target_location.transform.position );
+    img_ship.transform.rotation = rotation;
+    ship_view.transform.rotation = rotation;
   }
 
   private void updateShipPosition( Vector2Int server_location_position )

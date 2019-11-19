@@ -8,7 +8,7 @@ public class ShipViewManager : MonoBehaviour
   [SerializeField] private Transform controller = null;
   [SerializeField] private Transform targe_test = null;
   [SerializeField] private RectTransform[] backgrounds;
-  [SerializeField, Range(0.0f, 50.0f)] private float speed_parallax = 1.0f;
+  [SerializeField] public float speed_parallax = 1.0f;
 
   private Vector2 size_background;
 
