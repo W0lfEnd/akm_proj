@@ -4,21 +4,21 @@ namespace Model
 {
     public class GameModel
     {
-        public GameState gameState;
+        public ObservedValue<GameState> gameState = new ObservedValue<GameState>();
 
-        public int currentTime;
+        public ObservedValue<int> currentTime = new ObservedValue<int>();
 
-        public byte health;
-        public byte shield;
-        public byte oxygen;
-        public byte speed;
-        public byte petrol;
+        public ObservedValue<byte> health = new ObservedValue<byte>();
+        public ObservedValue<byte> shield = new ObservedValue<byte>();
+        public ObservedValue<byte> oxygen = new ObservedValue<byte>();
+        public ObservedValue<byte> speed  = new ObservedValue<byte>();
+        public ObservedValue<byte> petrol = new ObservedValue<byte>();
 
-        public Vector2Int curPosition;
-        public Vector2Int targetPosition;
+        public ObservedValue<Vector2Int> curPosition = new ObservedValue<Vector2Int>();
+        public ObservedValue<Vector2Int> targetPosition = new ObservedValue<Vector2Int>();
 
         public byte[] startCombo;
-        public int iteration;
+        public ObservedValue<int> iteration = new ObservedValue<int>();
 
         public Panel[] panels;
     }

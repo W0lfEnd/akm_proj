@@ -11,16 +11,16 @@ namespace Model
         {
             GameModel model = new GameModel
             {
-                gameState = GameState.NONE,
-                shield = startValue,
-                oxygen = startValue,
-                petrol = startValue,
-                health = startValue,
-                curPosition = new Vector2Int(0, 0),
-                targetPosition = new Vector2Int(0, 0),
-                speed = 0,
-                currentTime = 0,
-                iteration = 0
+                gameState      = new ObservedValue<GameState>( GameState.NONE ),
+                shield         = new ObservedValue<byte>( startValue ),
+                oxygen         = new ObservedValue<byte>( startValue ),
+                petrol         = new ObservedValue<byte>( startValue ),
+                health         = new ObservedValue<byte>( startValue ),
+                curPosition    = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
+                targetPosition = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
+                speed          = new ObservedValue<byte>( 0 ),
+                currentTime    = new ObservedValue<int>( 0 ),
+                iteration      = new ObservedValue<int>( 0 )
             };
             model.startCombo = Util.ShuffleList(0, 4).ToArray();
 

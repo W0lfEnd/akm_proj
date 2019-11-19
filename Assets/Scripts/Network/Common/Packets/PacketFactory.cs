@@ -70,25 +70,25 @@ public class PacketFactory
 
     private static void saveModelToPacket(Packet packet, GameModel model)
     {
-        packet.Buffer.Write((byte)model.gameState);
-        packet.Buffer.Write(model.currentTime);
-        packet.Buffer.Write(model.health);
-        packet.Buffer.Write(model.shield);
-        packet.Buffer.Write(model.oxygen);
-        packet.Buffer.Write(model.speed);
-        packet.Buffer.Write(model.petrol);
+        packet.Buffer.Write((byte)model.gameState.Value);
+        packet.Buffer.Write(model.currentTime.Value);
+        packet.Buffer.Write(model.health.Value);
+        packet.Buffer.Write(model.shield.Value);
+        packet.Buffer.Write(model.oxygen.Value);
+        packet.Buffer.Write(model.speed.Value);
+        packet.Buffer.Write(model.petrol.Value);
 
-        packet.Buffer.Write(model.curPosition.x);
-        packet.Buffer.Write(model.curPosition.y);
-        packet.Buffer.Write(model.targetPosition.x);
-        packet.Buffer.Write(model.targetPosition.y);
+        packet.Buffer.Write(model.curPosition.Value.x);
+        packet.Buffer.Write(model.curPosition.Value.y);
+        packet.Buffer.Write(model.targetPosition.Value.x);
+        packet.Buffer.Write(model.targetPosition.Value.y);
 
         packet.Buffer.Write(model.startCombo[0]);
         packet.Buffer.Write(model.startCombo[1]);
         packet.Buffer.Write(model.startCombo[2]);
         packet.Buffer.Write(model.startCombo[3]);
 
-        packet.Buffer.Write(model.iteration);
+        packet.Buffer.Write(model.iteration.Value);
 
         packet.Buffer.Write((byte)model.panels.Length);
         for (int i = 0; i < model.panels.Length; i++)

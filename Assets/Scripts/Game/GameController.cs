@@ -36,16 +36,16 @@ public class GameController
     public GameController()
     {
         _model = StartGameModelGenerator.Generate(3, 5);
-        _model.gameState = GameState.INIT;
+        _model.gameState.Value = GameState.INIT;
 
         _map = new Map();
     }
 
     public void DoIteration(float time)
     {
-        _model.gameState = GameState.RUN;
+        _model.gameState.Value = GameState.RUN;
 
-        if (_model.gameState == GameState.RUN)
+        if (_model.gameState.Value == GameState.RUN)
         {
             return;
         }
@@ -53,7 +53,7 @@ public class GameController
         if (startTime == 0)
         {
             startTime = time;
-            _model.currentTime = Convert.ToInt32(time * 1000);
+            _model.currentTime.Value = Convert.ToInt32(time * 1000);
         }
         // todo: time
         // _model.currentTime = time * 1000 - startTime
@@ -84,12 +84,12 @@ public class GameController
                 break;
             } 
             ++_meteorIteration;
-            _model.iteration = _meteorIteration;
+            _model.iteration.Value = _meteorIteration;
         }
 
         IncreaseShield();
 
-        if (_model.health >= MAX_VALUE)
+        if (_model.health.Value >= MAX_VALUE)
         {
             InscreaseOxygen();
         }
@@ -118,7 +118,7 @@ public class GameController
 
         if(playerInput.actionType == PlayerInput.ActionType.ChangeTarget)
         {
-            _model.targetPosition = playerInput.targetPosition;
+            _model.targetPosition.Value = playerInput.targetPosition;
             return true;
         }
         
@@ -138,18 +138,18 @@ public class GameController
                 SetRunCombination(inputElement);
                 break;
             case ButtonActionType.RunBtnId:
-                if (_model.gameState == GameState.PREPARE)
+                if (_model.gameState.Value == GameState.PREPARE)
                 {
-                    _model.gameState = GameState.RUN;
+                    _model.gameState.Value = GameState.RUN;
                 }
                 break;
             case ButtonActionType.ChangeSppedId:
                 var speed = Convert.ToByte(inputElement.inputValue * 10);
-                if(_model.gameState == GameState.RUN && (speed > MAX_VALUE || speed < 0))
+                if(_model.gameState.Value == GameState.RUN && (speed > MAX_VALUE || speed < 0))
                 {
                     return false;
                 }
-                _model.speed = speed;
+                _model.speed.Value = speed;
                 break;
             case ButtonActionType.PressFire:
                 break;
@@ -203,7 +203,7 @@ public class GameController
 
     private bool SetRunCombination(InputElement inputElement)
     {
-        if (_model.gameState == GameState.RUN)
+        if (_model.gameState.Value == GameState.RUN)
         {
             return true;
         }
@@ -249,7 +249,7 @@ public class GameController
         }
         if (countGoodIteration == _model.startCombo.Length)
         {
-            _model.gameState = GameState.PREPARE;
+            _model.gameState.Value = GameState.PREPARE;
         }
         return true;
     }
@@ -266,52 +266,52 @@ public class GameController
             damage = 60;
         }
 
-        _model.shield -= damage;
+        _model.shield.Value -= damage;
 
-        if (_model.shield <= 0)
+        if (_model.shield.Value <= 0)
         {
-            _model.health -= _model.shield;
-            _model.shield = 0;
+            _model.health.Value -= _model.shield.Value;
+            _model.shield.Value = 0;
         }
 
-        if (_model.health <= 0)
+        if (_model.health.Value <= 0)
         {
-            _model.gameState = GameState.LOSE;
+            _model.gameState.Value = GameState.LOSE;
         }
     }
 
     private void IncreaseShield()
     {
-        if (_model.oxygen >= MAX_VALUE)
+        if (_model.oxygen.Value >= MAX_VALUE)
         {
             return;
         }
-        _model.shield += 1;
+        _model.shield.Value += 1;
     }
 
     private void InscreaseOxygen()
     {
-        if (_model.oxygen >= MAX_VALUE)
+        if (_model.oxygen.Value >= MAX_VALUE)
         {
             return;
         }
-        _model.oxygen += 1;
+        _model.oxygen.Value += 1;
     }
 
     private void DecreaseOxygen()
     {
-        if (_model.oxygen <= 0)
+        if (_model.oxygen.Value <= 0)
         {
-            _model.gameState = GameState.LOSE;
+            _model.gameState.Value = GameState.LOSE;
             return;
         }
 
-        _model.oxygen -= 1;
+        _model.oxygen.Value -= 1;
     }
 
     private void ChooseTargetPoition(Vector2Int target)
     {
-        _model.targetPosition = target;
+        _model.targetPosition.Value = target;
     }
 }
 

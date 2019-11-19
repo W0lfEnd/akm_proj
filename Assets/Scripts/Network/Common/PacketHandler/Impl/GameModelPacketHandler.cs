@@ -11,26 +11,26 @@ public class GameModelPacketHandler : IPacketHandler
             if (client.Model == null)
             {
                 client.Model = new GameModel();
-                client.Model.startCombo = new byte[4];
+                client.Model.startCombo= new byte[4];
             }
 
-            client.Model.gameState = (GameState)reader.ReadByte();
-            client.Model.currentTime = reader.ReadInt32();
-            client.Model.health = reader.ReadByte();
-            client.Model.shield = reader.ReadByte();
-            client.Model.oxygen = reader.ReadByte();
-            client.Model.speed = reader.ReadByte();
-            client.Model.petrol = reader.ReadByte();
+            client.Model.gameState.Value = (GameState)reader.ReadByte();
+            client.Model.currentTime.Value = reader.ReadInt32();
+            client.Model.health.Value = reader.ReadByte();
+            client.Model.shield.Value = reader.ReadByte();
+            client.Model.oxygen.Value = reader.ReadByte();
+            client.Model.speed.Value = reader.ReadByte();
+            client.Model.petrol.Value = reader.ReadByte();
 
-            client.Model.curPosition = new Vector2Int(reader.ReadInt32(), reader.ReadInt32());
-            client.Model.targetPosition = new Vector2Int(reader.ReadInt32(), reader.ReadInt32());
+            client.Model.curPosition.Value = new Vector2Int(reader.ReadInt32(), reader.ReadInt32());
+            client.Model.targetPosition.Value = new Vector2Int(reader.ReadInt32(), reader.ReadInt32());
 
             client.Model.startCombo[0] = reader.ReadByte();
             client.Model.startCombo[1] = reader.ReadByte();
             client.Model.startCombo[2] = reader.ReadByte();
             client.Model.startCombo[3] = reader.ReadByte();
 
-            client.Model.iteration = reader.ReadInt32();
+            client.Model.iteration.Value = reader.ReadInt32();
 
             byte panelCount = reader.ReadByte();
             if (client.Model.panels == null)

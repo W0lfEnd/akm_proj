@@ -35,7 +35,7 @@ public class MapSpaceUI : MonoBehaviourBase
   {
     initComponents();
     
-    img_ship.transform.localPosition = fromServerCoords( Client.client.Model.curPosition );
+    img_ship.transform.localPosition = fromServerCoords( Client.client.Model.curPosition.Value );
   }
 
 
@@ -51,7 +51,7 @@ public class MapSpaceUI : MonoBehaviourBase
     if ( !was_inited_components )
       return;
 
-    img_ship.transform.localPosition = fromServerCoords( Client.client.Model.curPosition );
+    img_ship.transform.localPosition = fromServerCoords( Client.client.Model.curPosition.Value );
     drawShipToTargetConnector();
   }
 
