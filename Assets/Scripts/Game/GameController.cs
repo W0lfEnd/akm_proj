@@ -35,7 +35,7 @@ public class GameController
 
     public GameController()
     {
-        _model = StartGameModelGenerator.Generate(3, 4);
+        _model = StartGameModelGenerator.Generate(3, 5);
         _model.gameState = GameState.INIT;
 
         _map = new Map();
