@@ -34,7 +34,24 @@ namespace Model
                 model.panels[i] = generatePanel(i, inputs);
             }
 
+            model.sectors = GetSectors();
+
             return model;
+        }
+
+        private static Sector[] GetSectors()
+        {
+            return new Sector[]
+            {
+                new Sector{ position = 0, sectorType = SectorType.empty },
+                new Sector{ position = 1, sectorType = SectorType.health },
+                new Sector{ position = 2, sectorType = SectorType.oxygen },
+                new Sector{ position = 3, sectorType = SectorType.empty },
+                new Sector{ position = 4, sectorType = SectorType.petrol },
+                new Sector{ position = 5, sectorType = SectorType.empty },
+                new Sector{ position = 6, sectorType = SectorType.shield },
+                new Sector{ position = 7, sectorType = SectorType.empty },
+            };
         }
 
         private static Panel generatePanel(byte id, InputElement[] inputElements )

@@ -63,6 +63,16 @@ public class GameModelPacketHandler : IPacketHandler
                 }
                 client.Model.panels[i] = panel;
             }
+
+            if (client.Model.sectors == null)
+            {
+                byte secrotCount = reader.ReadByte();
+                client.Model.sectors = new Sector[secrotCount];
+                for (int i = 0; i < secrotCount; i++)
+                {
+                    client.Model.sectors[i] = new Sector { position = reader.ReadByte(), sectorType = (SectorType)reader.ReadByte() };
+                }
+            }
         }
     }
 }

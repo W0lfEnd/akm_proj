@@ -106,6 +106,13 @@ public class PacketFactory
                 packet.Buffer.Write(model.panels[i].inputElements[j].inputValue);
             }
         }
+
+        packet.Buffer.Write((byte)model.sectors.Length);
+        for (int i = 0; i < model.sectors.Length; i++)
+        {
+            packet.Buffer.Write(model.sectors[i].position);
+            packet.Buffer.Write((byte)model.sectors[i].sectorType);
+        }
     }
 
     private static void savePalyerInput(Packet packet, PlayerInput playerInput)

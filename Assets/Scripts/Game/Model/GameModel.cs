@@ -21,5 +21,7 @@ namespace Model
         public ObservedValue<int> iteration = new ObservedValue<int>();
 
         public Panel[] panels;
+
+        public Sector[] sectors;
     }
 }
