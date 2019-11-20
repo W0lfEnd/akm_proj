@@ -11,19 +11,11 @@ public class InputBase : MonoBehaviour
   private byte max_lenght;
   
   
-  public void initInput( InputType input_type, byte max_lenght )
+  public void initInput( byte panel_id, byte input_element_id, byte max_lenght )
   {
+    this.panel_id = panel_id;
+    this.input_element_id = input_element_id;
     this.max_lenght = max_lenght;
-    
-    switch ( input_type )
-    {
-      case InputType.Button: 
-        
-        break;
-      case InputType.Toggle: break;
-      case InputType.Slider: break;
-      default: throw new ArgumentOutOfRangeException( nameof( input_type ), input_type, null );
-    }
   }
 
   #region onValueChange
