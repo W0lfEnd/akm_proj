@@ -16,8 +16,8 @@ public class GameModelPacketHandler : IPacketHandler
 
             client.Model.gameState.Value = (GameState)reader.ReadByte();
             client.Model.currentTime.Value = reader.ReadInt32();
-            client.Model.health.Value = reader.ReadByte();
-            client.Model.shield.Value = reader.ReadByte();
+            client.Model.health.Value = reader.ReadUInt16();
+            client.Model.shield.Value = reader.ReadUInt16();
             client.Model.oxygen.Value = reader.ReadByte();
             client.Model.speed.Value = reader.ReadByte();
             client.Model.petrol.Value = reader.ReadByte();
@@ -70,7 +70,14 @@ public class GameModelPacketHandler : IPacketHandler
                 client.Model.sectors = new Sector[secrotCount];
                 for (int i = 0; i < secrotCount; i++)
                 {
-                    client.Model.sectors[i] = new Sector { position = reader.ReadByte(), sectorType = (SectorType)reader.ReadByte() };
+                    client.Model.sectors[i] = new Sector
+                    {
+                        position = reader.ReadByte(),
+                        sectorType = (SectorType)reader.ReadByte(),
+                        health = reader.ReadByte(),
+                        isFire = reader.ReadBoolean(),
+                        isRepairing = reader.ReadBoolean(),
+                };
                 }
             }
         }

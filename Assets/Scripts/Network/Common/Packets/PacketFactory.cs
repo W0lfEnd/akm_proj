@@ -112,6 +112,9 @@ public class PacketFactory
         {
             packet.Buffer.Write(model.sectors[i].position);
             packet.Buffer.Write((byte)model.sectors[i].sectorType);
+            packet.Buffer.Write(model.sectors[i].health);
+            packet.Buffer.Write(model.sectors[i].isFire);
+            packet.Buffer.Write(model.sectors[i].isRepairing);
         }
     }
 
