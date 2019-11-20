@@ -10,12 +10,13 @@ public class ShipSectorUI : MonoBehaviourBase, IPointerClickHandler
   public event Action<Sector> onClick = delegate {};
 
   [SerializeField] private Image sector_filter_image;
-  
-  [SerializeField] private Image sector_in_fire;
-  [SerializeField] private Button btn_turn_off_fire;
-  
-  [SerializeField] private Transform repair_ui;
-  [SerializeField] private Slider hp_slider;
+
+  [SerializeField] private Transform fire_ui;
+  //[SerializeField] private Image     sector_in_fire;
+  [SerializeField] private Button    btn_turn_off_fire;
+
+  [SerializeField] private Transform       repair_ui;
+  [SerializeField] private Slider          hp_slider;
   [SerializeField] private TextMeshProUGUI hp_text;
 
 
@@ -34,8 +35,12 @@ public class ShipSectorUI : MonoBehaviourBase, IPointerClickHandler
     initComponents();
 
     this.sector = sector;
+  }
 
-    sector_filter_image.color = getSectorColor();
+  private void Update()
+  {
+    if ( was_inited_components )
+      updateSectorUI();
   }
 
   public void OnPointerClick( PointerEventData eventData )
@@ -45,21 +50,21 @@ public class ShipSectorUI : MonoBehaviourBase, IPointerClickHandler
 
   private void turnOffFire()
   {
-    //TODO потушити вогонь блять
+    Client.client.Send( new PlayerInput { actionType = PlayerInput.ActionType.FightFire, ownerId = Client.client.Id, sectorPosition = sector.position } );
   }
 
   private Color getSectorColor()
   {
-    //if( sector.durability == 100 )
+    if( sector.health == 100 )
       return Color.clear;
 
-    //if ( sector.durability >= 90 )TODO
+    if ( sector.health >= 90 )
       return new Color( 0.04f, 1f, 0.02f, 0.53f );
 
-    //if ( sector.durability >= 30 )
+    if ( sector.health >= 30 )
       return new Color( 1f, 0.76f, 0f, 0.53f );
 
-    //if ( sector.durability > 0 )
+    if ( sector.health > 0 )
       return new Color( 1f, 0f, 0.08f, 0.53f );
 
     return new Color( 0f, 0f, 0f, 0.73f );
@@ -67,10 +72,10 @@ public class ShipSectorUI : MonoBehaviourBase, IPointerClickHandler
 
   public void updateSectorUI()
   {
-    //sector_in_fire.enabled = sector.is_in_fire;
-    //sector_in_repair.enabled = sector.is_repairing;
-    //sector_image.color = getSectorColor();
-    //hp_slider.value = sector.hp;
-    //hp_text.text = sector.hp.ToString() + "%";
+    fire_ui.gameObject.SetActive( sector.isFire );
+    repair_ui.gameObject.SetActive( sector.isRepairing );
+    sector_filter_image.color = getSectorColor();
+    hp_slider.value = sector.health;
+    hp_text.text = sector.health + "%";
   }
 }

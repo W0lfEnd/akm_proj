@@ -37,7 +37,7 @@ public class MapSpaceUI : MonoBehaviourBase
     onLocationClicked( location_points[0] ); //this is temp start choose location, todo delete
     Client.client.Model.curPosition   .onValueChange += onShipMoved;
     Client.client.Model.targetPosition.onValueChange += onLocationChanged;
-    Client.client.Model.speed.onValueChange += new_speed => ship_view.speed_parallax = new_speed / 50.0f;
+    Client.client.Model.speed.onValueChange += new_speed => ship_view.speed_parallax = new_speed / 10.0f;
   }
 
 
