@@ -6,7 +6,9 @@ public class PlayerInput
     {
         ChangePanel,
         PressButton,
-        ChangeTarget
+        ChangeTarget,
+        Repair,
+        FightFire,
     }
 
     public int ownerId;
@@ -15,4 +17,5 @@ public class PlayerInput
     public byte inputElementId;
     public byte inputValue;
     public Vector2Int targetPosition;
+    public byte sectorPosition; 
 }

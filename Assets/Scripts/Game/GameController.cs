@@ -87,7 +87,7 @@ public class GameController
             _model.iteration.Value = _meteorIteration;
         }
 
-        
+        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
         moveShipToTarget();
     }
 
@@ -101,6 +101,8 @@ public class GameController
         IncreaseShield();
         CalcOxygen();
         CalcSectorHealth();
+
+        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
     }
 
     private void CalcOxygen()
@@ -130,7 +132,6 @@ public class GameController
                 _model.sectors[i].health += 5;
             }
         }
-        
     }
 
     public Map GetMap()
@@ -151,7 +152,7 @@ public class GameController
 
     public bool ApplyPlayerInput(PlayerInput playerInput)
     {
-        if (playerInput.actionType == PlayerInput.ActionType.ChangePanel)
+        if(playerInput.actionType == PlayerInput.ActionType.ChangePanel)
         {
             return ChangePanel(playerInput);
         }
@@ -160,6 +161,16 @@ public class GameController
         {
             _model.targetPosition.Value = playerInput.targetPosition;
             return true;
+        }
+
+        if( playerInput.actionType == PlayerInput.ActionType.FightFire)
+        {
+            _model.sectors[playerInput.sectorPosition].isFire = false;
+        }
+
+        if(playerInput.actionType == PlayerInput.ActionType.Repair)
+        {
+            _model.sectors[playerInput.sectorPosition].isRepairing = true;
         }
         
         if (!ValidInputElement(playerInput, out InputElement inputElement))
@@ -247,6 +258,7 @@ public class GameController
         {
             return true;
         }
+
         List<InputElement> inputs = new List<InputElement>();
         for (int i = 0; i < _model.panels.Length; i++)
         {
@@ -324,7 +336,14 @@ public class GameController
             for (int i = 0; i < targetCount; i++)
             {
                 var sector = _model.sectors.First(s => sectorIds.Contains(s.position));
-                sector.health -= (byte)damage;
+                if (damage > sector.health)
+                {
+                    sector.health = 0;
+                }
+                else
+                {
+                    sector.health -= (byte)damage;
+                }
                 sector.isFire = new System.Random().Next(0, 10) < 4;
             }
             _model.shield.Value = 0;

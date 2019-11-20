@@ -14,7 +14,8 @@ public class PlayerInputPacketHandler : IPacketHandler
                 panelId = reader.ReadByte(),
                 inputElementId = reader.ReadByte(),
                 inputValue = reader.ReadByte(),
-                targetPosition = new Vector2Int( reader.ReadInt32(), reader.ReadInt32())
+                targetPosition = new Vector2Int(reader.ReadInt32(), reader.ReadInt32()),
+                sectorPosition = reader.ReadByte(),
             };
 
             server.GameController.ApplyPlayerInput(playerInput);

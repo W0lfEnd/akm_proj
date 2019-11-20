@@ -19,7 +19,6 @@ public class Client : MonoBehaviour, IClient
 
     private NetClient _client;
     private NetConnection _connection;
-    //private WebSocketPlugin _client;
     private PacketHandlerManager _packetHandlerManager;
     private bool _isConnected;
 
@@ -28,18 +27,12 @@ public class Client : MonoBehaviour, IClient
         var message = _client.CreateMessage();
         message.Write(PacketFactory.CreatePacketByType( PacketType.C2S_Input, playerInput).GetData());
         _client.SendMessage(message, _connection, NetDeliveryMethod.ReliableOrdered);
-        //_client.Send(PacketFactory.CreatePacketByType(PacketType.C2S_Input, playerInput).GetData());
     }
 
     public void Connect()
     {
         var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonConstants.DefaultIPAddress : txtIP.text;
         var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonConstants.DefaultServerPort : txtPort.text;
-
-        /*var uri = new Uri($"ws://{host}:{port}/{CommonConstants.DefaultHostName}");
-        _client = new WebSocketPlugin(uri);
-        _client.ChangeStateEvent += OnChangeState;
-        _client.Connect();*/
 
         var config = new NetPeerConfiguration(CommonConstants.DefaultHostName);
         config.Port = Convert.ToUInt16(CommonConstants.DefaultClientPort);

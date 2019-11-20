@@ -127,5 +127,6 @@ public class PacketFactory
         packet.Buffer.Write(playerInput.inputValue);
         packet.Buffer.Write(playerInput.targetPosition.x);
         packet.Buffer.Write(playerInput.targetPosition.y);
+        packet.Buffer.Write(playerInput.sectorPosition);
     }
 }
