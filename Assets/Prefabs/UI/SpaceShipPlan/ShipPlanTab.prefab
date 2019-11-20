@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 898312280385302067}
   - component: {fileID: 7496543393167693185}
   - component: {fileID: 6835724816176426846}
+  - component: {fileID: 9092014929180404383}
   m_Layer: 0
   m_Name: BtnPlace4
   m_TagString: Untagged
@@ -289,6 +290,22 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &9092014929180404383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619386540489628420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button_prefab: {fileID: 0}
+  toggle_prefab: {fileID: 0}
+  slider_prefab: {fileID: 0}
+  content_root: {fileID: 0}
 --- !u!1 &2358884013805054089
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +475,7 @@ GameObject:
   - component: {fileID: 2749351554189206076}
   - component: {fileID: 1567979644932456099}
   - component: {fileID: 7837514731146129913}
+  - component: {fileID: 5920547765549440614}
   m_Layer: 0
   m_Name: BtnPlace0
   m_TagString: Untagged
@@ -578,6 +596,22 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &5920547765549440614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650219492449387567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button_prefab: {fileID: 0}
+  toggle_prefab: {fileID: 0}
+  slider_prefab: {fileID: 0}
+  content_root: {fileID: 0}
 --- !u!1 &2831976724972880388
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +624,7 @@ GameObject:
   - component: {fileID: 558942835927748498}
   - component: {fileID: 3438501695693166305}
   - component: {fileID: 723646485576950761}
+  - component: {fileID: 712437054463743821}
   m_Layer: 0
   m_Name: BtnPlace2
   m_TagString: Untagged
@@ -710,6 +745,22 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &712437054463743821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831976724972880388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button_prefab: {fileID: 0}
+  toggle_prefab: {fileID: 0}
+  slider_prefab: {fileID: 0}
+  content_root: {fileID: 0}
 --- !u!1 &4267009881177572074
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,6 +847,7 @@ GameObject:
   - component: {fileID: 8531722867606673341}
   - component: {fileID: 1591166036514021693}
   - component: {fileID: 3573281489405446437}
+  - component: {fileID: 2534353428673311387}
   m_Layer: 0
   m_Name: BtnPlace1
   m_TagString: Untagged
@@ -916,6 +968,22 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &2534353428673311387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4373374162845152554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button_prefab: {fileID: 0}
+  toggle_prefab: {fileID: 0}
+  slider_prefab: {fileID: 0}
+  content_root: {fileID: 0}
 --- !u!1 &5649827168397382896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,11 +1074,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn_places:
-  - {fileID: 7837514731146129913}
-  - {fileID: 3573281489405446437}
-  - {fileID: 723646485576950761}
-  - {fileID: 5123018308912629430}
-  - {fileID: 6835724816176426846}
+  - {fileID: 5920547765549440614}
+  - {fileID: 2534353428673311387}
+  - {fileID: 712437054463743821}
+  - {fileID: 710864196567485938}
+  - {fileID: 9092014929180404383}
 --- !u!1 &6171024314892192223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,6 +1091,7 @@ GameObject:
   - component: {fileID: 2112529708234340503}
   - component: {fileID: 4429755719178903378}
   - component: {fileID: 5123018308912629430}
+  - component: {fileID: 710864196567485938}
   m_Layer: 0
   m_Name: BtnPlace3
   m_TagString: Untagged
@@ -1143,6 +1212,22 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &710864196567485938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6171024314892192223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button_prefab: {fileID: 0}
+  toggle_prefab: {fileID: 0}
+  slider_prefab: {fileID: 0}
+  content_root: {fileID: 0}
 --- !u!1 &6396038201569792185
 GameObject:
   m_ObjectHideFlags: 0

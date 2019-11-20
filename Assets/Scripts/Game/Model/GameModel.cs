@@ -8,8 +8,8 @@ namespace Model
 
         public ObservedValue<int> currentTime = new ObservedValue<int>();
 
-        public ObservedValue<byte> health = new ObservedValue<byte>();
-        public ObservedValue<byte> shield = new ObservedValue<byte>();
+        public ObservedValue<ushort> health = new ObservedValue<ushort>();
+        public ObservedValue<ushort> shield = new ObservedValue<ushort>();
         public ObservedValue<byte> oxygen = new ObservedValue<byte>();
         public ObservedValue<byte> speed  = new ObservedValue<byte>();
         public ObservedValue<byte> petrol = new ObservedValue<byte>();

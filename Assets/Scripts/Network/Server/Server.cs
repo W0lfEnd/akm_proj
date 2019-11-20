@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using WebSocketSharp;
-using WebSocketSharp.Server;
 
-public class Server : MonoBehaviour//, ISubscriber
+public class Server : MonoBehaviour
 {
     [SerializeField] private TMP_InputField txtIP; 
     [SerializeField] private TMP_InputField txtPort;
     [SerializeField] private TMP_InputField txtMaxPlayerCount;
     [SerializeField] private Client client;
 
-    //private WebSocketServer _server;
+
     private static NetServer _server;
     private static List<ClientInfo> _clients;
     private PacketHandlerManager _packetHandlerManager;
@@ -55,6 +53,7 @@ public class Server : MonoBehaviour//, ISubscriber
 
         _gameController = new GameController();
         StartCoroutine(ClientConnect());
+        StartCoroutine(IterationEachSecond());
 
         Debug.Log("Server starting");
     }
@@ -72,6 +71,18 @@ public class Server : MonoBehaviour//, ISubscriber
             Debug.Log("Server started");
             client.Connect();
         }
+    }
+
+    IEnumerator IterationEachSecond()
+    {
+        do
+        {
+            yield return new WaitForSeconds(1);
+            if (_server.Status == NetPeerStatus.Running)
+            {
+                _gameController.DoIterationOnEachSeconds();
+            }
+        } while (true);
     }
 
     private void OnConnect(ClientInfo clientInfo)

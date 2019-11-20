@@ -35,7 +35,7 @@ public class GameController
 
     public GameController()
     {
-        _model = StartGameModelGenerator.Generate(3, 5);
+        _model = StartGameModelGenerator.Generate(5, 5);
         _model.gameState.Value = GameState.INIT;
 
         _map = new Map();
@@ -87,18 +87,50 @@ public class GameController
             _model.iteration.Value = _meteorIteration;
         }
 
-        IncreaseShield();
+        
+        moveShipToTarget();
+    }
 
-        if (_model.health.Value >= MAX_VALUE)
+    public void DoIterationOnEachSeconds()
+    {
+        if ( _model == null || _model.gameState.Value != GameState.RUN )
+        {
+            return;
+        }
+
+        IncreaseShield();
+        CalcOxygen();
+        CalcSectorHealth();
+    }
+
+    private void CalcOxygen()
+    {
+        var oxygenDamageCount = (byte)_model.sectors.Count(s => s.health <= 30);
+        if ( oxygenDamageCount == 0 )
         {
             InscreaseOxygen();
         }
         else
         {
-            DecreaseOxygen();
+            DecreaseOxygen(oxygenDamageCount);
         }
+    }
 
-        moveShipToTarget();
+    private void CalcSectorHealth()
+    {
+        for (int i = 0; i < _model.sectors.Length; i++)
+        {
+            if ( _model.sectors[i].isFire )
+            {
+                _model.sectors[i].health -= 4;
+            }
+
+            if( _model.sectors[i].isRepairing )
+            {
+                _model.sectors[i].health += 5;
+            }
+        }
+        
     }
 
     public Map GetMap()
@@ -264,21 +296,37 @@ public class GameController
 
     private void Collide(byte meteorSize)
     {
-        byte damage = 20;
+        short damage = 150;
+        byte targetCount = 2;
         if( meteorSize == 1)
         {
-            damage = 40;
+            damage = 350;
+            targetCount = 3;
         }
         else if( meteorSize == 2)
         {
-            damage = 60;
+            damage = 600;
+            targetCount = 4;
         }
 
-        _model.shield.Value -= damage;
+        var damageSector = _model.shield.Value - damage;
+        _model.shield.Value -= (ushort)damage;
 
+        if (damageSector < 0 )
+        {
+            damageSector = Math.Abs(damageSector);
+        }
         if (_model.shield.Value <= 0)
         {
-            _model.health.Value -= _model.shield.Value;
+            var sectorIds = Util.ShuffleList(0, 8).Take(targetCount);
+            damage = (short)(damageSector / targetCount);
+
+            for (int i = 0; i < targetCount; i++)
+            {
+                var sector = _model.sectors.First(s => sectorIds.Contains(s.position));
+                sector.health -= (byte)damage;
+                sector.isFire = new System.Random().Next(0, 10) < 4;
+            }
             _model.shield.Value = 0;
         }
 
@@ -306,8 +354,10 @@ public class GameController
         _model.oxygen.Value += 1;
     }
 
-    private void DecreaseOxygen()
+    private void DecreaseOxygen( byte value )
     {
+        _model.oxygen.Value -= value;
+
         if (_model.oxygen.Value <= 0)
         {
             _model.gameState.Value = GameState.LOSE;
@@ -315,11 +365,6 @@ public class GameController
         }
 
         _model.oxygen.Value -= 1;
-    }
-
-    private void ChooseTargetPoition(Vector2Int target)
-    {
-        _model.targetPosition.Value = target;
     }
 }
 

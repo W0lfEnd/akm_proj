@@ -12,10 +12,10 @@ namespace Model
             GameModel model = new GameModel
             {
                 gameState      = new ObservedValue<GameState>( GameState.NONE ),
-                shield         = new ObservedValue<byte>( startValue ),
+                shield         = new ObservedValue<ushort>( 800 ),
+                health         = new ObservedValue<ushort>( 800 ),
                 oxygen         = new ObservedValue<byte>( startValue ),
                 petrol         = new ObservedValue<byte>( startValue ),
-                health         = new ObservedValue<byte>( startValue ),
                 curPosition    = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
                 targetPosition = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
                 speed          = new ObservedValue<byte>( 100 ),//TODO remove hardcoded speed by dynamicly changed
@@ -44,10 +44,10 @@ namespace Model
             return new Sector[]
             {
                 new Sector{ position = 0, sectorType = SectorType.empty },
-                new Sector{ position = 1, sectorType = SectorType.health },
+                new Sector{ position = 1, sectorType = SectorType.empty },
                 new Sector{ position = 2, sectorType = SectorType.oxygen },
                 new Sector{ position = 3, sectorType = SectorType.empty },
-                new Sector{ position = 4, sectorType = SectorType.petrol },
+                new Sector{ position = 4, sectorType = SectorType.oxygen },
                 new Sector{ position = 5, sectorType = SectorType.empty },
                 new Sector{ position = 6, sectorType = SectorType.shield },
                 new Sector{ position = 7, sectorType = SectorType.empty },
