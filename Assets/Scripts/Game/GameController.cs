@@ -108,6 +108,7 @@ public class GameController
     private void CalcOxygen()
     {
         var oxygenDamageCount = (byte)_model.sectors.Count(s => s.health <= 30);
+
         if ( oxygenDamageCount == 0 )
         {
             InscreaseOxygen();
@@ -357,7 +358,7 @@ public class GameController
 
     private void IncreaseShield()
     {
-        if (_model.oxygen.Value >= MAX_VALUE)
+        if (_model.shield.Value >= 800 || _model.sectors.First( s => s.sectorType == SectorType.shield ).health == 0 )
         {
             return;
         }
@@ -366,7 +367,7 @@ public class GameController
 
     private void InscreaseOxygen()
     {
-        if (_model.oxygen.Value >= MAX_VALUE)
+        if (_model.oxygen.Value >= MAX_VALUE )
         {
             return;
         }

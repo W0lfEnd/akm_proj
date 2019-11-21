@@ -43,14 +43,14 @@ namespace Model
         {
             return new Sector[]
             {
-                new Sector{ position = 0, sectorType = SectorType.empty },
-                new Sector{ position = 1, sectorType = SectorType.empty },
-                new Sector{ position = 2, sectorType = SectorType.oxygen },
-                new Sector{ position = 3, sectorType = SectorType.empty },
-                new Sector{ position = 4, sectorType = SectorType.oxygen },
-                new Sector{ position = 5, sectorType = SectorType.empty },
-                new Sector{ position = 6, sectorType = SectorType.shield },
-                new Sector{ position = 7, sectorType = SectorType.empty },
+                new Sector{ position = 0, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 1, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 2, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 3, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 4, sectorType = SectorType.oxygen, health = 100 },
+                new Sector{ position = 5, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 6, sectorType = SectorType.shield, health = 100 },
+                new Sector{ position = 7, sectorType = SectorType.empty, health = 100 },
             };
         }
 
