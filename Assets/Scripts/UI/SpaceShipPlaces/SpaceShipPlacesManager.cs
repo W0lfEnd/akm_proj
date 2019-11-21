@@ -1,6 +1,7 @@
 ﻿using System;
 using Model;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.UI;
 
 
@@ -8,12 +9,44 @@ public class SpaceShipPlacesManager : MonoBehaviour
 {
   [SerializeField] private PanelInputs[] btn_places;
   [SerializeField] private Transform[] spawn_point;
+  [SerializeField] private PanelOutput test1;
+  [SerializeField] private PanelOutput test2;
+  [SerializeField] private PanelOutput test3;
+  [SerializeField] private PanelOutput test4;
+  [SerializeField] private PanelOutput test5;
 
   private int my_id => Client.client.Id;
+
   
+
   private void Start()
   {
     setAllPlacesGreen();
+    
+    test1.setPrefix( "speed:" );
+    test1.setText( Client.client.Model.speed.Value.ToString() );
+    Client.client.Model.speed.onValueChange += b => test1.setText( b.ToString() );
+    
+    test2.setPrefix( "health:" );
+    test2.setText( Client.client.Model.health.Value.ToString() );
+    Client.client.Model.health.onValueChange += b => test2.setText( b.ToString() );
+    
+    test3.setPrefix( "oxygen:" );
+    test3.setText( Client.client.Model.oxygen.Value.ToString() );
+    Client.client.Model.oxygen.onValueChange += b => test3.setText( b.ToString() );
+    
+    test4.setPrefix( "petrol:" );
+    test4.setText( Client.client.Model.petrol.Value.ToString() );
+    Client.client.Model.petrol.onValueChange += b => test4.setText( b.ToString() );
+    
+    test5.setPrefix( "shield:" );
+    test5.setText( Client.client.Model.shield.Value.ToString() );
+    Client.client.Model.shield.onValueChange += b => test5.setText( b.ToString() );
+  }
+
+  private void Update()
+  {
+    Debug.Log( Client.client.Model.speed.Value );
   }
 
   public void deinitAllPanels()
