@@ -87,6 +87,11 @@ public class GameController
             _model.iteration.Value = _meteorIteration;
         }
 
+        if (_model.curPosition == _model.targetPosition)
+        {
+            _model.speed.Value = 0;
+        }
+
         _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
         moveShipToTarget();
     }
