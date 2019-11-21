@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class PanelInputs : MonoBehaviour
 {
+  [SerializeField] private SpaceShipPlacesManager ship_places_manager;
+  
   private byte panel_id;
   private byte owner_id;
   private InputElement[] input_elements;
@@ -57,7 +59,7 @@ public class PanelInputs : MonoBehaviour
 
   private void spawnElement( InputBase input_prefab, InputElement inputElemen, byte id )
   {
-    InputBase element = Instantiate( input_prefab, content_root );
+    InputBase element = Instantiate( input_prefab, ship_places_manager.getInputSpawnPosition[id].position, Quaternion.identity, content_root  );
     element.initInput(id , inputElemen.id, inputElemen.maxValue );
   }
 }

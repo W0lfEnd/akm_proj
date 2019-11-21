@@ -32,7 +32,7 @@ public class Server : MonoBehaviour
 
         var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonData.DefaultIPAddress : txtIP.text;
         var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonData.DefaultServerPort : txtPort.text;
-        _maxPlayerCount = txtMaxPlayerCount == null || string.IsNullOrWhiteSpace(txtMaxPlayerCount.text) ? (byte)1 : System.Convert.ToByte(txtMaxPlayerCount);
+        _maxPlayerCount = txtMaxPlayerCount == null || string.IsNullOrWhiteSpace(txtMaxPlayerCount.text) ? (byte)1 : System.Convert.ToByte(txtMaxPlayerCount.text);
 
         NetPeerConfiguration config = new NetPeerConfiguration(CommonData.DefaultHostName);
         config.Port = int.Parse(port);
