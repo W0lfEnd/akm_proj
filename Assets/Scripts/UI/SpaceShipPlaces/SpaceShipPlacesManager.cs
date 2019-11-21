@@ -15,8 +15,7 @@ public class SpaceShipPlacesManager : MonoBehaviour
   [SerializeField] private PanelOutput test4;
   [SerializeField] private PanelOutput test5;
 
-  private int my_id => Client.client.Id;
-
+  private long my_id => Client.client.Id;
   
 
   private void Start()

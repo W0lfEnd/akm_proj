@@ -5,7 +5,7 @@ public interface IClient
 {
     GameModel Model { get; }
     Map Map { get; }
-    int Id { get; }
+    long Id { get; }
 
     void Send(PlayerInput playerInput);
 }
