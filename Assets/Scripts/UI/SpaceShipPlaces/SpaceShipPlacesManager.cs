@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SpaceShipPlacesManager : MonoBehaviour
 {
   [SerializeField] private PanelInputs[] btn_places;
+  [SerializeField] private Transform[] spawn_point;
 
   private int my_id => Client.client.Id;
   
@@ -47,4 +48,6 @@ public class SpaceShipPlacesManager : MonoBehaviour
     foreach ( PanelInputs btn in btn_places )
       btn.GetComponent<Image>().color = Color.green;
   }
+
+  public Transform[] getInputSpawnPosition => spawn_point;
 }
