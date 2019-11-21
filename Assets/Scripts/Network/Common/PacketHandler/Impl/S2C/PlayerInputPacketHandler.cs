@@ -9,7 +9,7 @@ public class PlayerInputPacketHandler : IPacketHandler
         {
             PlayerInput playerInput = new PlayerInput()
             {
-                ownerId = reader.ReadInt32(),
+                ownerId = reader.ReadInt64(),
                 actionType = (PlayerInput.ActionType)reader.ReadByte(),
                 panelId = reader.ReadByte(),
                 inputElementId = reader.ReadByte(),

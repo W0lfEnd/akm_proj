@@ -32,12 +32,16 @@ public class PacketFactory
                 }
                 savePalyerInput(packet, playerInput);
                 break;
-            case PacketType.S2C_SendId:
-                if (!int.TryParse( context.ToString(), out int id))
+            case PacketType.C2S_Join:
+            case PacketType.S2C_Joined:
+                var joinedInfo = context as Tuple<long, string>;
+                if( joinedInfo == null )
                 {
-                    
+                    throw new Exception($"{nameof(context)} is not type {nameof(Tuple<long, string>)}");
                 }
-                packet.Buffer.Write(id);
+                packet.Buffer.Write(joinedInfo.Item1);
+                packet.Buffer.Write((byte)joinedInfo.Item2.Length);
+                packet.Buffer.Write(System.Text.Encoding.UTF8.GetBytes(joinedInfo.Item2));
                 break;
             default: throw new Exception("NotSuported type of packet");
 
