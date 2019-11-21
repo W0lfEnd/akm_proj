@@ -43,7 +43,7 @@ public class GameModelPacketHandler : IPacketHandler
                 var panel = new Panel();
 
                 panel.id = reader.ReadByte();
-                panel.ownerId = reader.ReadInt32();
+                panel.ownerId = reader.ReadInt64();
                 byte elementCount = reader.ReadByte();
                 if (panel.inputElements == null)
                 {

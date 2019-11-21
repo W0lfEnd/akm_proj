@@ -7,7 +7,7 @@ public class ClientInfo
     public IPAddress IpAddress;
     public ushort Port;
     public WebSocket Socket;
-    public string ConnectionId;
+    public long ConnectionId;
     public NetConnection NetConnection;
 
     public override bool Equals(object obj)
