@@ -8,7 +8,7 @@ public class SpaceShipPlacesManager : MonoBehaviour
 {
   [SerializeField] private PanelInputs[] btn_places;
 
-  private int my_id => Client.client.Id;
+  private long my_id => Client.client.Id;
   
   private void Start()
   {

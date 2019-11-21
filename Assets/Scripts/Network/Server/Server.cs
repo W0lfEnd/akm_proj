@@ -1,4 +1,5 @@
 ﻿using Lidgren.Network;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ public class Server : MonoBehaviour
     [SerializeField] private Client client;
 
 
-    private static NetServer _server;
+    public NetServer _server;
     private static List<ClientInfo> _clients;
     private PacketHandlerManager _packetHandlerManager;
     private bool _isRun;
@@ -29,11 +30,11 @@ public class Server : MonoBehaviour
             return;
         }
 
-        var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonConstants.DefaultIPAddress : txtIP.text;
-        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonConstants.DefaultServerPort : txtPort.text;
+        var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonData.DefaultIPAddress : txtIP.text;
+        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonData.DefaultServerPort : txtPort.text;
         _maxPlayerCount = txtMaxPlayerCount == null || string.IsNullOrWhiteSpace(txtMaxPlayerCount.text) ? (byte)1 : System.Convert.ToByte(txtMaxPlayerCount);
 
-        NetPeerConfiguration config = new NetPeerConfiguration(CommonConstants.DefaultHostName);
+        NetPeerConfiguration config = new NetPeerConfiguration(CommonData.DefaultHostName);
         config.Port = int.Parse(port);
         config.LocalAddress = NetUtility.Resolve(host);
         config.MaximumConnections = _maxPlayerCount;
@@ -51,6 +52,8 @@ public class Server : MonoBehaviour
         _server.RegisterReceivedCallback(ReceiveData);
         _server.Start();
 
+        CommonData.DefaultIPAddress = host;
+
         _gameController = new GameController();
         StartCoroutine(ClientConnect());
         StartCoroutine(IterationEachSecond());
@@ -60,7 +63,7 @@ public class Server : MonoBehaviour
 
     IEnumerator ClientConnect()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         if (_server.Status != NetPeerStatus.Running)
         {
@@ -69,7 +72,7 @@ public class Server : MonoBehaviour
         else
         {
             Debug.Log("Server started");
-            client.Connect();
+            client.Connect( true );
         }
     }
 
@@ -92,12 +95,6 @@ public class Server : MonoBehaviour
         {
             _clients.Add(clientInfo);
 
-            var messageId = _server.CreateMessage();
-            var packetId = PacketFactory.CreatePacketByType(PacketType.S2C_SendId, 1000 + _clients.Count);
-            messageId.Write(packetId.GetData());
-            _server.SendMessage(messageId, clientInfo.NetConnection, NetDeliveryMethod.ReliableOrdered);
-            packetId.Dispose();
-
             var packetMap = PacketFactory.CreatePacketByType(PacketType.S2C_Map, _gameController.GetMap());
             var messageMap = _server.CreateMessage();
             messageMap.Write(packetMap.GetData());
@@ -110,12 +107,6 @@ public class Server : MonoBehaviour
             _server.SendMessage(messageModel, clientInfo.NetConnection, NetDeliveryMethod.ReliableOrdered);
             packetModel.Dispose();
         }
-    }
-
-    IEnumerator SendMap()
-    {
-        yield return new WaitForSeconds(1);
-        
     }
 
     private void OnDisconnect(ClientInfo clientInfo)
@@ -137,7 +128,7 @@ public class Server : MonoBehaviour
             case NetIncomingMessageType.ConnectionApproval:
                 Debug.Log("ConnectionApproval");
                 string secretKey = message.ReadString();
-                if (secretKey == CommonConstants.DefaultHostName)
+                if (secretKey == CommonData.DefaultHostName)
                 {
                     message.SenderConnection.Approve();
                 }
@@ -159,7 +150,7 @@ public class Server : MonoBehaviour
                     clientInfo.IpAddress = message.SenderConnection.RemoteEndPoint.Address;
                     clientInfo.Port = (ushort)message.SenderConnection.RemoteEndPoint.Port;
                     clientInfo.NetConnection = message.SenderConnection;
-                    clientInfo.ConnectionId = message.SenderConnection.Peer.UniqueIdentifier.ToString();
+                    clientInfo.ConnectionId = message.SenderConnection.Peer.UniqueIdentifier;
                     _clients.Add(clientInfo);
                     OnConnect(clientInfo);
                 }
@@ -195,6 +186,7 @@ public class Server : MonoBehaviour
 
         _packetHandlerManager = new PacketHandlerManager();
         _packetHandlerManager.AddHandler(PacketType.C2S_Input, new PlayerInputPacketHandler());
+        _packetHandlerManager.AddHandler(PacketType.C2S_Join, new JoinPacketHandler());
     }
 
     private static int iteration = 0;

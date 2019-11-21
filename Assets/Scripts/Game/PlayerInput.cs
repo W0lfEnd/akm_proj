@@ -11,7 +11,7 @@ public class PlayerInput
         FightFire,
     }
 
-    public int ownerId;
+    public long ownerId;
     public ActionType actionType;
     public byte panelId;
     public byte inputElementId;
