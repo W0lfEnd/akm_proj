@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameController
 {
-    private enum ButtonActionType: byte
+    public enum ButtonActionType: byte
     {
         ComboBtn1Id = 0,
         ComboBtn2Id = 1,
