@@ -25,7 +25,7 @@ namespace Model
             model.panels = new Panel[countPanel];
 
             InputElement[] inputElements = createInputElements();
-            var panelIds = Util.ShuffleList(Util.getSource(0, 5));
+            var panelIds = new byte[]{ 0, 1, 2, 3, 4 };//Util.ShuffleList(Util.getSource(0, 5));
 
             for (byte i = 0; i < 3; i++)
             {

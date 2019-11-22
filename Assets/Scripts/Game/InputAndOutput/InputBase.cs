@@ -1,5 +1,6 @@
 ﻿using System;
 using Model;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,15 +8,20 @@ using UnityEngine.UI;
 public class InputBase : MonoBehaviour
 {
   private byte panel_id;
-  private byte input_element_id;
+  private GameController.ButtonActionType input_element_id;
   private byte max_lenght;
+
+  [SerializeField] private TextMeshProUGUI text;
   
   
   public void initInput( byte panel_id, byte input_element_id, byte max_lenght )
   {
     this.panel_id = panel_id;
-    this.input_element_id = input_element_id;
+    this.input_element_id = (GameController.ButtonActionType)input_element_id;
     this.max_lenght = max_lenght;
+
+    if( text )
+      text.text = InputTextHelper.getInputName( this.input_element_id );
   }
 
   #region onValueChange
@@ -49,10 +55,10 @@ public class InputBase : MonoBehaviour
       ownerId = Client.client.Id,
       actionType = PlayerInput.ActionType.PressButton,
       panelId = panel_id,
-      inputElementId = input_element_id,
+      inputElementId = (byte)input_element_id,
       inputValue = input_value,
     });
     
-    Debug.LogWarning( $"{gameObject.name} is changed value: {input_value}" );
+    Debug.LogWarning( $"{gameObject.name} is changed  id: {(int)input_element_id} value: {input_value}" );
   }
 }

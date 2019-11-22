@@ -12,6 +12,9 @@ public class MeteorColisionHintsPanel : MonoBehaviour
         if ( Client.client == null || Client.client.Map == null )
             return;
 
+        
+        
+            
         MeteorData nearest_meteor = Client.client.Map.meteorsData[Client.client.Model.iteration.Value];
         int hint_time = 0;
         switch ( nearest_meteor.size )
@@ -24,14 +27,15 @@ public class MeteorColisionHintsPanel : MonoBehaviour
         if ( nearest_meteor.timeSeconds - Client.client.Model.currentTime.Value < hint_time )
         {
             meteor_hint_panel.SetActive( true );
-            foreach ( var VARIABLE in nearest_meteor.combo )
-            {
-                
-            }
         }
         else
         {
             meteor_hint_panel.SetActive( false );
+        }
+
+        foreach ( var VARIABLE in Client.client.Model.maneverComboValidState )
+        {
+            meteor_combo_hint.text += VARIABLE.ToString();
         }
     }
     

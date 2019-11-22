@@ -48,6 +48,13 @@ public class MapSpaceUI : MonoBehaviourBase
     onShipMoved( Client.client.Model.curPosition.Value );
   }
 
+  private void Update()
+  {
+    foreach ( var VARIABLE in Client.client.Model.startCombo )
+    {
+      Debug.Log( "NEED COMBO: " + VARIABLE );
+    }
+  }
 
   #region UI
   private void updateLocations()
