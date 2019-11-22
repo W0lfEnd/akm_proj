@@ -194,7 +194,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -218.9, y: -217}
+  m_AnchoredPosition: {x: -256, y: -217}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &898312280385302067
@@ -302,9 +302,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button_prefab: {fileID: 0}
-  toggle_prefab: {fileID: 0}
-  slider_prefab: {fileID: 0}
+  ship_places_manager: {fileID: 0}
+  button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
+    type: 3}
+  toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
+    type: 3}
+  slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
+    type: 3}
   content_root: {fileID: 0}
 --- !u!1 &2358884013805054089
 GameObject:
@@ -500,7 +504,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 304, y: 0}
+  m_AnchoredPosition: {x: 248, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2749351554189206076
@@ -608,9 +612,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button_prefab: {fileID: 0}
-  toggle_prefab: {fileID: 0}
-  slider_prefab: {fileID: 0}
+  ship_places_manager: {fileID: 0}
+  button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
+    type: 3}
+  toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
+    type: 3}
+  slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
+    type: 3}
   content_root: {fileID: 0}
 --- !u!1 &2831976724972880388
 GameObject:
@@ -649,7 +657,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 50, y: -84}
+  m_AnchoredPosition: {x: -27, y: -84}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &558942835927748498
@@ -757,9 +765,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button_prefab: {fileID: 0}
-  toggle_prefab: {fileID: 0}
-  slider_prefab: {fileID: 0}
+  ship_places_manager: {fileID: 0}
+  button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
+    type: 3}
+  toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
+    type: 3}
+  slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
+    type: 3}
   content_root: {fileID: 0}
 --- !u!1 &4267009881177572074
 GameObject:
@@ -796,7 +808,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1200, y: 1000}
+  m_SizeDelta: {x: 800, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8160480653251132536
 CanvasRenderer:
@@ -826,7 +838,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 3bfffff4b5f23654b816408304b8d6b9, type: 3}
+  m_Sprite: {fileID: 687459663882646812, guid: 82fc52bd2fdc51e4e9b3d58feaf30d85, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -872,7 +884,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 50, y: 79}
+  m_AnchoredPosition: {x: -27, y: 79}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8531722867606673341
@@ -980,9 +992,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button_prefab: {fileID: 0}
-  toggle_prefab: {fileID: 0}
-  slider_prefab: {fileID: 0}
+  ship_places_manager: {fileID: 0}
+  button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
+    type: 3}
+  toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
+    type: 3}
+  slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
+    type: 3}
   content_root: {fileID: 0}
 --- !u!1 &5649827168397382896
 GameObject:
@@ -1079,6 +1095,12 @@ MonoBehaviour:
   - {fileID: 712437054463743821}
   - {fileID: 710864196567485938}
   - {fileID: 9092014929180404383}
+  spawn_point: []
+  test1: {fileID: 0}
+  test2: {fileID: 0}
+  test3: {fileID: 0}
+  test4: {fileID: 0}
+  test5: {fileID: 0}
 --- !u!1 &6171024314892192223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,7 +1138,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -218.9, y: 232}
+  m_AnchoredPosition: {x: -256, y: 232}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2112529708234340503
@@ -1224,9 +1246,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button_prefab: {fileID: 0}
-  toggle_prefab: {fileID: 0}
-  slider_prefab: {fileID: 0}
+  ship_places_manager: {fileID: 0}
+  button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
+    type: 3}
+  toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
+    type: 3}
+  slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
+    type: 3}
   content_root: {fileID: 0}
 --- !u!1 &6396038201569792185
 GameObject:
