@@ -46,6 +46,7 @@ public class GameController
 
     public void DoMeteorIteration()
     {
+        _model.gameState.Value = GameState.RUN;
         if (_model == null || _model.gameState.Value != GameState.RUN)
         {
             return;
@@ -197,7 +198,7 @@ public class GameController
                 }
                 break;
             case ButtonActionType.ChangeSppedId:
-                var speed = Convert.ToByte(inputElement.inputValue * 10);
+                var speed = Convert.ToByte(inputElement.inputValue * 1000);
                 if(_model.gameState.Value == GameState.RUN && (speed > MAX_VALUE || speed < 0))
                 {
                     return false;

@@ -1,11 +1,12 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class PanelOutput : MonoBehaviour
 {
-  [SerializeField] private TextMeshProUGUI ui_text = null;
+  [SerializeField] private Text ui_text = null;
 
   private string prefix = String.Empty;
 
