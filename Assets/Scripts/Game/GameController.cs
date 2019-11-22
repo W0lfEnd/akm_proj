@@ -86,6 +86,7 @@ public class GameController
 
     public void DoIterationOnEachSeconds()
     {
+        _model.gameState.Value = GameState.RUN;
         if ( _model == null || _model.gameState.Value != GameState.RUN )
         {
             return;
@@ -149,7 +150,7 @@ public class GameController
 
     private void moveShipToTarget()
     {
-        Vector2 res_in_float = Vector2.MoveTowards( _model.curPosition.Value, _model.targetPosition.Value, Time.fixedDeltaTime * 10 * _model.speed.Value );
+        Vector2 res_in_float = Vector2.MoveTowards( _model.curPosition.Value, _model.targetPosition.Value, Time.fixedDeltaTime * 3000 );
         _model.curPosition.Value = new Vector2Int( (int)res_in_float.x, (int)res_in_float.y );
     }
 
@@ -198,12 +199,7 @@ public class GameController
                 }
                 break;
             case ButtonActionType.ChangeSppedId:
-                var speed = Convert.ToByte(inputElement.inputValue * 1000);
-                if(_model.gameState.Value == GameState.RUN && (speed > MAX_VALUE || speed < 0))
-                {
-                    return false;
-                }
-                _model.speed.Value = speed;
+                _model.speed.Value = 70;
                 break;
             case ButtonActionType.ComboManeuver1Id:
             case ButtonActionType.ComboManeuver2Id:

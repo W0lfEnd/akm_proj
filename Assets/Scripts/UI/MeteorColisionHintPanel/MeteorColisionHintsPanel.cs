@@ -33,9 +33,14 @@ public class MeteorColisionHintsPanel : MonoBehaviour
             meteor_hint_panel.SetActive( false );
         }
 
-        foreach ( var VARIABLE in Client.client.Model.maneverComboValidState )
+        meteor_combo_hint.text = "";
+        for ( int index = 0; index < nearest_meteor.combo.Length; index++ )
         {
-            meteor_combo_hint.text += VARIABLE.ToString();
+            byte variable = nearest_meteor.combo[index];
+            if ( Client.client.Model.maneverComboValidState[index] )
+                meteor_combo_hint.text += "<color=\"green\">" + variable;
+            else
+                meteor_combo_hint.text += variable;
         }
     }
     
