@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Model
@@ -24,7 +25,7 @@ namespace Model
             
             model.panels = new Panel[countPanel];
 
-            InputElement[] inputElements = createInputElements();
+            List<InputElement> inputElements = Util.ShuffleList( createInputElements() );
             var panelIds = Util.ShuffleList(Util.getSource(0, 5));
 
             for (byte i = 0; i < 3; i++)
@@ -68,9 +69,9 @@ namespace Model
             return panel;
         }
 
-        private static InputElement[] createInputElements()
+        private static List<InputElement> createInputElements()
         {
-            return new InputElement[]
+            return new List<InputElement>
             {
                 new InputElement
                 {
@@ -121,14 +122,6 @@ namespace Model
                     inputType = InputType.Slider,
                     inputValue = 0,
                     maxValue = 10
-                },
-                new InputElement // fire id
-                {
-                    id = 6,
-                    groupId = 0,
-                    inputType = InputType.Button,
-                    inputValue = 0,
-                    maxValue = 1
                 },
 
                 new InputElement
