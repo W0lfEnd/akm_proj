@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using TMPro;
 using UnityEngine;
 
@@ -187,6 +188,18 @@ public class Server : MonoBehaviour
         _packetHandlerManager = new PacketHandlerManager();
         _packetHandlerManager.AddHandler(PacketType.C2S_Input, new PlayerInputPacketHandler());
         _packetHandlerManager.AddHandler(PacketType.C2S_Join, new JoinPacketHandler());
+
+        if (txtIP != null)
+        {
+            foreach(IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    txtIP.text = ip.MapToIPv4().ToString();
+                    Debug.Log(ip.MapToIPv4().ToString());
+                }
+            }
+        }
     }
 
     private static int iteration = 0;
