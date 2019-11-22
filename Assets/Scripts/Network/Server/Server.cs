@@ -196,8 +196,8 @@ public class Server : MonoBehaviour
         iteration++;
         if ( iteration >= 10)
         {
-            _gameController.DoIteration(Time.realtimeSinceStartup);
             iteration = 0;
+            _gameController.DoMeteorIteration();
             Debug.Log( "Iterate successful" );
             var messageModel = _server.CreateMessage();
             var packetModel = PacketFactory.CreatePacketByType(PacketType.S2C_Model, _gameController.GetModel());

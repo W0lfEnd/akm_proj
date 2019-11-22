@@ -94,6 +94,12 @@ public class PacketFactory
 
         packet.Buffer.Write(model.iteration.Value);
 
+        packet.Buffer.Write((byte)model.maneverComboValidState.Length);
+        for (int i = 0; i < model.maneverComboValidState.Length; i++)
+        {
+            packet.Buffer.Write(model.maneverComboValidState[i]);
+        }
+
         packet.Buffer.Write((byte)model.panels.Length);
         for (int i = 0; i < model.panels.Length; i++)
         {

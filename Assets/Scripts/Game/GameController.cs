@@ -17,7 +17,8 @@ public class GameController
 
         ChangeSppedId = 5,
 
-        PressFire = 6,
+        MapOutputId = 6,
+        ShipStateOutputId = 7,
 
         ComboManeuver1Id = 10,
         ComboManeuver2Id = 11,
@@ -31,33 +32,26 @@ public class GameController
     private GameModel _model;
     private Map _map;
     private int _meteorIteration = 0;
-    private float startTime = 0;
+    private int _time = 0;
 
     public GameController()
     {
-        _model = StartGameModelGenerator.Generate(5, 5);
+        _map = new Map();
+
+        _model = StartGameModelGenerator.Generate(5, 4);
         _model.gameState.Value = GameState.INIT;
 
-        _map = new Map();
+        _model.maneverComboValidState = new bool[_map.meteorsData[0].combo.Length];
     }
 
-    public void DoIteration(float time)
+    public void DoMeteorIteration()
     {
-        _model.gameState.Value = GameState.RUN;
-
-        if (_model.gameState.Value != GameState.RUN)
+        if (_model == null || _model.gameState.Value != GameState.RUN)
         {
             return;
         }
 
-        if (startTime == 0)
-        {
-            startTime = time;
-            _model.currentTime.Value = Convert.ToInt32(time * 1000);
-        }
-        // todo: time
-        // _model.currentTime = time * 1000 - startTime
-        if (Convert.ToInt32(_model.currentTime.Value) == _map.meteorsData[_meteorIteration].timeSeconds)
+        if (_model.currentTime.Value == _map.meteorsData[_meteorIteration].timeSeconds)
         {
             var combo = _map.meteorsData[_meteorIteration].combo;
             var result = new bool[combo.Length];
@@ -71,7 +65,7 @@ public class GameController
                         if (combo[i] == element.id)
                         {
                             result[i] = element.inputValue == element.maxValue;
-                            if(!result[i])
+                            if (!result[i])
                             {
                                 goto Label;
                             }
@@ -79,21 +73,14 @@ public class GameController
                     }
                 }
 
-                Label:
+            Label:
                 Collide(_map.meteorsData[_meteorIteration].size);
                 break;
-            } 
+            }
             ++_meteorIteration;
             _model.iteration.Value = _meteorIteration;
+            _model.maneverComboValidState = new bool[_map.meteorsData[_meteorIteration].combo.Length];
         }
-
-        if (_model.curPosition == _model.targetPosition)
-        {
-            _model.speed.Value = 0;
-        }
-
-        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
-        moveShipToTarget();
     }
 
     public void DoIterationOnEachSeconds()
@@ -103,10 +90,19 @@ public class GameController
             return;
         }
 
+        if (_model.curPosition == _model.targetPosition)
+        {
+            _model.speed.Value = 0;
+        }
+
+        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
+        moveShipToTarget();
+
         IncreaseShield();
         CalcOxygen();
         CalcSectorHealth();
-
+        ++_time;
+        _model.currentTime.Value = _time;
         _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
     }
 
@@ -208,14 +204,47 @@ public class GameController
                 }
                 _model.speed.Value = speed;
                 break;
-            case ButtonActionType.PressFire:
-                break;
             case ButtonActionType.ComboManeuver1Id:
             case ButtonActionType.ComboManeuver2Id:
             case ButtonActionType.ComboManeuver3Id:
             case ButtonActionType.ComboManeuver4Id:
             case ButtonActionType.ComboManeuver5Id:
             case ButtonActionType.ComboManeuver6Id:
+                var combo = _map.meteorsData[_model.iteration.Value].combo;
+                var index = Array.FindIndex(combo, i => i == (byte)actionType);
+                if ( index == -1 || _model.maneverComboValidState.All( c => c == true))
+                {
+                    return true;
+                }
+
+                for (int i = 0; i < _model.maneverComboValidState.Length; i++)
+                {
+                    if(_model.maneverComboValidState[i])
+                    {
+                        continue;
+                    }
+
+                    if (index == i)
+                    {
+                        _model.maneverComboValidState[index] = true;
+                    }
+                    else
+                    {
+                        _model.maneverComboValidState = new bool[combo.Length];
+                        for (int p = 0; p < _model.panels.Length; p++)
+                        {
+                            for (int e = 0; e < _model.panels[p].inputElements.Length; e++)
+                            {
+                                var element = _model.panels[p].inputElements[e];
+                                if (combo[i] == element.id)
+                                {
+                                    element.inputValue = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 break;
             default: return false;
         }
@@ -336,7 +365,7 @@ public class GameController
         }
         if (_model.shield.Value <= 0)
         {
-            var sectorIds = Util.ShuffleList(0, 8).Take(targetCount);
+            var sectorIds = Util.ShuffleList(Util.getSource( 0, 8 )).Take(targetCount);
             damage = (short)(damageSector / targetCount);
 
             for (int i = 0; i < targetCount; i++)

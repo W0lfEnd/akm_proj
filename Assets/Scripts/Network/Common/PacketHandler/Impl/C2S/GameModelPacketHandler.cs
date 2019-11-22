@@ -32,6 +32,13 @@ public class GameModelPacketHandler : IPacketHandler
 
             client.Model.iteration.Value = reader.ReadInt32();
 
+            byte maneurComboValidStateSize = reader.ReadByte();
+            client.Model.maneverComboValidState = new bool[maneurComboValidStateSize];
+            for (int i = 0; i < maneurComboValidStateSize; i++)
+            {
+                client.Model.maneverComboValidState[i] = reader.ReadBoolean();
+            }
+
             byte panelCount = reader.ReadByte();
             if (client.Model.panels == null)
             {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace Model
@@ -38,7 +37,7 @@ namespace Model
                     size = 6;
                 }
 
-                var result = Util.ShuffleList(10, 6).Take(size).ToArray();
+                var result = Util.ShuffleList( Util.getSource(10, 6)).Take(size).ToArray();
                 return result;
             }
 

@@ -19,6 +19,7 @@ namespace Model
 
         public byte[] startCombo;
         public ObservedValue<int> iteration = new ObservedValue<int>();
+        public bool[] maneverComboValidState;
 
         public Panel[] panels;
 

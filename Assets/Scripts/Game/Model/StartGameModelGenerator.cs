@@ -5,8 +5,6 @@ namespace Model
 {
     public static class StartGameModelGenerator
     {
-        private static byte id;
-
         public static GameModel Generate(byte countPanel, byte countInputOnPanel, byte startValue = 100)
         {
             GameModel model = new GameModel
@@ -22,17 +20,21 @@ namespace Model
                 currentTime    = new ObservedValue<int>( 0 ),
                 iteration      = new ObservedValue<int>( 0 )
             };
-            model.startCombo = Util.ShuffleList(0, 4).ToArray();
-
+            model.startCombo = Util.ShuffleList(Util.getSource(0, 4)).ToArray();
+            
             model.panels = new Panel[countPanel];
 
             InputElement[] inputElements = createInputElements();
+            var panelIds = Util.ShuffleList(Util.getSource(0, 5));
 
-            for (byte i = 0; i < countPanel; i++)
+            for (byte i = 0; i < 3; i++)
             {
                 InputElement[] inputs = inputElements.Skip(i * countInputOnPanel).Take(countInputOnPanel).ToArray();
-                model.panels[i] = generatePanel(i, inputs);
+                model.panels[i] = generatePanel(panelIds[i], inputs);
             }
+
+            model.panels[3] = new Panel { id = panelIds[3], ownerId = -1, inputElements = new InputElement[] { new InputElement { id = 6, groupId = 100, inputType = InputType.Output, inputValue = 0, maxValue = 0 } } };
+            model.panels[4] = new Panel { id = panelIds[4], ownerId = -1, inputElements = new InputElement[] { new InputElement { id = 7, groupId = 200, inputType = InputType.Output, inputValue = 0, maxValue = 0 } } };
 
             model.sectors = GetSectors();
 

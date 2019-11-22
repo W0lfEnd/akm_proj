@@ -4,6 +4,7 @@
     {
         Button,
         Toggle,
-        Slider
+        Slider,
+        Output,
     }
 }
