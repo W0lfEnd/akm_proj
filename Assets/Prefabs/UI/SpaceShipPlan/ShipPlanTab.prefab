@@ -302,13 +302,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ship_places_manager: {fileID: 0}
+  ship_places_manager: {fileID: 5787999951973018438}
   button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
     type: 3}
   toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
     type: 3}
   slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
     type: 3}
+  map_object: {fileID: 0}
+  ship_state: {fileID: 0}
   content_root: {fileID: 0}
 --- !u!1 &2358884013805054089
 GameObject:
@@ -612,13 +614,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ship_places_manager: {fileID: 0}
+  ship_places_manager: {fileID: 5787999951973018438}
   button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
     type: 3}
   toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
     type: 3}
   slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
     type: 3}
+  map_object: {fileID: 0}
+  ship_state: {fileID: 0}
   content_root: {fileID: 0}
 --- !u!1 &2831976724972880388
 GameObject:
@@ -765,13 +769,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ship_places_manager: {fileID: 0}
+  ship_places_manager: {fileID: 5787999951973018438}
   button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
     type: 3}
   toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
     type: 3}
   slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
     type: 3}
+  map_object: {fileID: 0}
+  ship_state: {fileID: 0}
   content_root: {fileID: 0}
 --- !u!1 &4267009881177572074
 GameObject:
@@ -992,13 +998,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ship_places_manager: {fileID: 0}
+  ship_places_manager: {fileID: 5787999951973018438}
   button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
     type: 3}
   toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
     type: 3}
   slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
     type: 3}
+  map_object: {fileID: 0}
+  ship_state: {fileID: 0}
   content_root: {fileID: 0}
 --- !u!1 &5649827168397382896
 GameObject:
@@ -1246,13 +1254,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06219a9573f0b74f829bc51b6ec8e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ship_places_manager: {fileID: 0}
+  ship_places_manager: {fileID: 5787999951973018438}
   button_prefab: {fileID: 7944842875267972708, guid: 281857e64702fd44293193714c440fb5,
     type: 3}
   toggle_prefab: {fileID: 7166432387813386460, guid: 1a28085eea6374e468e1627efdc19f30,
     type: 3}
   slider_prefab: {fileID: 1908232792900039799, guid: 6d779277f2960694b8ef12b1ea26eff3,
     type: 3}
+  map_object: {fileID: 0}
+  ship_state: {fileID: 0}
   content_root: {fileID: 0}
 --- !u!1 &6396038201569792185
 GameObject:
