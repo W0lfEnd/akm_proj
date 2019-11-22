@@ -20,8 +20,6 @@ public class SpaceShipPlacesManager : MonoBehaviour
 
   private void Start()
   {
-    setAllPlacesGreen();
-    
     test1.setPrefix( "speed:" );
     test1.setText( Client.client.Model.speed.Value.ToString() );
     Client.client.Model.speed.onValueChange += b => test1.setText( b.ToString() );
@@ -41,11 +39,34 @@ public class SpaceShipPlacesManager : MonoBehaviour
     test5.setPrefix( "shield:" );
     test5.setText( Client.client.Model.shield.Value.ToString() );
     Client.client.Model.shield.onValueChange += b => test5.setText( b.ToString() );
+    
+
+    // foreach ( Panel panel in Client.client.Model.panels )
+    // {
+    //   panel.ownerId.onValueChange +=
+    //     value =>
+    //     {
+    //       btn_places[panel.id].GetComponent<Image>().color =
+    //         value == 255 || value == -1 ?new Color( 0.82f, 0.82f, 0.82f ) : value == my_id ? Color.red : Color.green;
+    //       
+    //       btn_places[panel.id].GetComponent<CanvasGroup>().interactable = value == 255 || value == -1;
+    //     };
+    // }
   }
 
   private void Update()
   {
     Debug.Log( Client.client.Model.speed.Value );
+    
+    foreach ( Panel panel in Client.client.Model.panels )
+    {
+      long value = panel.ownerId;
+
+      btn_places[panel.id].GetComponent<Image>().color =
+       value == -1 ? new Color( 0.82f, 0.82f, 0.82f ) : value == my_id ? Color.green : Color.red;
+          
+      btn_places[panel.id].GetComponent<CanvasGroup>().interactable = value == -1;
+    }
   }
 
   public void deinitAllPanels()
@@ -62,23 +83,12 @@ public class SpaceShipPlacesManager : MonoBehaviour
     deinitAllPanels();
     
     Panel cur_panel = Client.client.Model.panels[idx_of_place];
+    Client.client.Send( new PlayerInput{ ownerId = my_id, actionType = PlayerInput.ActionType.ChangePanel, panelId = (byte)idx_of_place } );
+
     
     btn_places[idx_of_place].initPanel( (byte)idx_of_place, (byte)cur_panel.ownerId, cur_panel.inputElements );
     
-    changeColorPlace( idx_of_place );
     gameObject.SetActive( false );// Тушим панель
-  }
-
-  private void changeColorPlace( int idx_of_place )
-  {
-    setAllPlacesGreen();
-    btn_places[idx_of_place].GetComponent<Image>().color = Color.black;
-  }
-
-  private void setAllPlacesGreen()
-  {
-    foreach ( PanelInputs btn in btn_places )
-      btn.GetComponent<Image>().color = Color.green;
   }
 
   public Transform[] getInputSpawnPosition => spawn_point;

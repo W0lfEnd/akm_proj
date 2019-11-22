@@ -16,6 +16,8 @@ public class PanelInputs : MonoBehaviour
   public InputBase button_prefab = null;
   public InputBase toggle_prefab = null;
   public InputBase slider_prefab = null;
+  public GameObject map_object;
+  public GameObject ship_state;
 
   public Transform content_root = null;
 
@@ -51,8 +53,25 @@ public class PanelInputs : MonoBehaviour
         case InputType.Slider: 
           spawnElement( slider_prefab, input_elements[i], (byte)i );
           break;
-        
-        default: throw new ArgumentOutOfRangeException();
+      }
+      
+      if ( input_elements[i].inputType == InputType.Output )
+      {
+        if ( input_elements[i].id == (byte)GameController.ButtonActionType.MapOutputId )
+        {
+          map_object.SetActive( true );
+          ship_state.SetActive( false );
+        }else
+          if ( input_elements[i].id == (byte)GameController.ButtonActionType.ShipStateOutputId )
+          {
+            map_object.SetActive( false );
+            ship_state.SetActive( true );
+          }
+      }
+      else
+      {
+        map_object.SetActive( false );
+        ship_state.SetActive( false );
       }
     }
   }
