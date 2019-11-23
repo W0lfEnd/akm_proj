@@ -216,7 +216,7 @@ public class GameController
                 }
                 break;
             case ButtonActionType.ChangeSppedId:
-                _model.speed.Value = 70;
+                _model.speed.Value = (byte)(inputElement.inputValue * 10);
                 break;
             case ButtonActionType.ComboManeuver1Id:
             case ButtonActionType.ComboManeuver2Id:
