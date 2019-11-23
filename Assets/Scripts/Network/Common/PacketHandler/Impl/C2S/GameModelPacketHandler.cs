@@ -16,8 +16,8 @@ public class GameModelPacketHandler : IPacketHandler
 
             client.Model.gameState.Value = (GameState)reader.ReadByte();
             client.Model.currentTime.Value = reader.ReadInt32();
-            client.Model.health.Value = reader.ReadUInt16();
-            client.Model.shield.Value = reader.ReadUInt16();
+            client.Model.health.Value = reader.ReadInt16();
+            client.Model.shield.Value = reader.ReadInt16();
             client.Model.oxygen.Value = reader.ReadByte();
             client.Model.speed.Value = reader.ReadByte();
             client.Model.petrol.Value = reader.ReadByte();

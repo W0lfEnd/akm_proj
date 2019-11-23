@@ -97,7 +97,7 @@ public class GameController
             _model.speed.Value = 0;
         }
 
-        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
+        _model.health.Value = (short)_model.sectors.Sum(s => s.health);
         moveShipToTarget();
 
         IncreaseShield();
@@ -105,7 +105,7 @@ public class GameController
         CalcSectorHealth();
         ++_time;
         _model.currentTime.Value = _time;
-        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
+        _model.health.Value = (short)_model.sectors.Sum(s => s.health);
     }
 
     private void CalcOxygen()
@@ -126,14 +126,30 @@ public class GameController
     {
         for (int i = 0; i < _model.sectors.Length; i++)
         {
-            if ( _model.sectors[i].isFire )
+            if (_model.sectors[i].isFire)
             {
-                _model.sectors[i].health -= 4;
+                var dmg = _model.sectors[i].health - 4;
+                if (dmg <= 0)
+                {
+                    _model.sectors[i].health = 0;
+                }
+                else
+                {
+                    _model.sectors[i].health -= 4;
+                }
             }
 
-            if( _model.sectors[i].isRepairing )
+            if (_model.sectors[i].isRepairing)
             {
-                _model.sectors[i].health += 5;
+                var h = _model.sectors[i].health + 5;
+                if (h > 100)
+                {
+                    _model.sectors[i].health = 100;
+                }
+                else
+                {
+                    _model.sectors[i].health += 5;
+                }
             }
         }
     }
@@ -181,6 +197,7 @@ public class GameController
         {
             return false;
         }
+        inputElement.inputValue = playerInput.inputValue;
 
         var actionType = (ButtonActionType)inputElement.id;
 
@@ -228,14 +245,17 @@ public class GameController
                     else
                     {
                         _model.maneverComboValidState = new bool[combo.Length];
-                        for (int p = 0; p < _model.panels.Length; p++)
+                        for (int c = 0; c < combo.Length; c++)
                         {
-                            for (int e = 0; e < _model.panels[p].inputElements.Length; e++)
+                            for (int p = 0; p < _model.panels.Length; p++)
                             {
-                                var element = _model.panels[p].inputElements[e];
-                                if (combo[i] == element.id)
+                                for (int e = 0; e < _model.panels[p].inputElements.Length; e++)
                                 {
-                                    element.inputValue = 0;
+                                    var element = _model.panels[p].inputElements[e];
+                                    if (combo[c] == element.id)
+                                    {
+                                        element.inputValue = 0;
+                                    }
                                 }
                             }
                         }
@@ -354,20 +374,30 @@ public class GameController
         }
 
         var damageSector = _model.shield.Value - damage;
-        _model.shield.Value -= (ushort)damage;
 
-        if (damageSector < 0 )
+        if (damageSector <= 0)
         {
+            _model.shield.Value = 0;
             damageSector = Math.Abs(damageSector);
+        }
+        else
+        {
+            _model.shield.Value -= damage;
         }
         if (_model.shield.Value <= 0)
         {
-            var sectorIds = Util.ShuffleList(Util.getSource( 0, 8 )).Take(targetCount);
+            var goodSectors = _model.sectors.Where(s => s.health > 0).Select(s => s.position).ToList();
+            var sectorIds = Util.ShuffleList(goodSectors).Take(targetCount);
             damage = (short)(damageSector / targetCount);
 
             for (int i = 0; i < targetCount; i++)
             {
-                var sector = _model.sectors.First(s => sectorIds.Contains(s.position));
+                var sector = _model.sectors.FirstOrDefault(s => sectorIds.Contains(s.position));
+                if (sector == null)
+                {
+                    _model.gameState.Value = GameState.LOSE;
+                    return;
+                }
                 if (damage > sector.health)
                 {
                     sector.health = 0;
@@ -378,7 +408,6 @@ public class GameController
                 }
                 sector.isFire = new System.Random().Next(0, 10) < 4;
             }
-            _model.shield.Value = 0;
         }
 
         if (_model.health.Value <= 0)

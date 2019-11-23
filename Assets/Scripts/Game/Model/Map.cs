@@ -41,8 +41,8 @@ namespace Model
                 return result;
             }
 
-            var data = new MeteorData[5];
-            var time = 30;
+            var data = new MeteorData[150];
+            var time = 20;
 
             data[0] = new MeteorData { timeSeconds = time, size = 0, combo = createCombo(0) };
 
@@ -50,7 +50,7 @@ namespace Model
             {
                 var random = new System.Random();
                 var meteorSize = random.Next(0, 3);
-                time += random.Next(20, 45);
+                time += random.Next(15, 25);
                 data[i] = new MeteorData { timeSeconds = time, size = (byte)meteorSize, combo = createCombo(meteorSize) };
             }
 

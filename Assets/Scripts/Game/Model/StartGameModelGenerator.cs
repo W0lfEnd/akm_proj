@@ -10,8 +10,8 @@ namespace Model
             GameModel model = new GameModel
             {
                 gameState      = new ObservedValue<GameState>( GameState.NONE ),
-                shield         = new ObservedValue<ushort>( 800 ),
-                health         = new ObservedValue<ushort>( 800 ),
+                shield         = new ObservedValue<short>( 800 ),
+                health         = new ObservedValue<short>( 800 ),
                 oxygen         = new ObservedValue<byte>( startValue ),
                 petrol         = new ObservedValue<byte>( startValue ),
                 curPosition    = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
