@@ -248,14 +248,17 @@ public class GameController
                     else
                     {
                         _model.maneverComboValidState = new bool[combo.Length];
-                        for (int p = 0; p < _model.panels.Length; p++)
+                        for (int c = 0; c < combo.Length; c++)
                         {
-                            for (int e = 0; e < _model.panels[p].inputElements.Length; e++)
+                            for (int p = 0; p < _model.panels.Length; p++)
                             {
-                                var element = _model.panels[p].inputElements[e];
-                                if (combo[i] == element.id)
+                                for (int e = 0; e < _model.panels[p].inputElements.Length; e++)
                                 {
-                                    element.inputValue = 0;
+                                    var element = _model.panels[p].inputElements[e];
+                                    if (combo[c] == element.id)
+                                    {
+                                        element.inputValue = 0;
+                                    }
                                 }
                             }
                         }
