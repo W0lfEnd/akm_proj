@@ -32,6 +32,7 @@ public class SpaceShipManager : MonoBehaviour
   }
 
   public int old_hp = -1000;
+  public int old_shield = -1000;
   private void Update()
   {
     if ( Client.client == null || Client.client.Model == null )
@@ -40,9 +41,10 @@ public class SpaceShipManager : MonoBehaviour
     if ( Client.client.Model.health.Value <= 0 )
       destroyByMeteor();
     else
-      if ( old_hp != -1000 && old_hp > Client.client.Model.health.Value )
+      if ( (old_hp != -1000 && old_hp > Client.client.Model.health.Value) || (old_shield != -1000 && old_shield > Client.client.Model.shield.Value) )
         meteorDamage();
 
     old_hp = Client.client.Model.health.Value;
+    old_shield = Client.client.Model.shield.Value;
   }
 }
