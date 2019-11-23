@@ -124,14 +124,30 @@ public class GameController
     {
         for (int i = 0; i < _model.sectors.Length; i++)
         {
-            if ( _model.sectors[i].isFire )
+            if (_model.sectors[i].isFire)
             {
-                _model.sectors[i].health -= 4;
+                var dmg = _model.sectors[i].health - 4;
+                if (dmg <= 0)
+                {
+                    _model.sectors[i].health = 0;
+                }
+                else
+                {
+                    _model.sectors[i].health -= 4;
+                }
             }
 
-            if( _model.sectors[i].isRepairing )
+            if (_model.sectors[i].isRepairing)
             {
-                _model.sectors[i].health += 5;
+                var h = _model.sectors[i].health + 5;
+                if (h > 100)
+                {
+                    _model.sectors[i].health = 100;
+                }
+                else
+                {
+                    _model.sectors[i].health += 5;
+                }
             }
         }
     }
@@ -370,7 +386,8 @@ public class GameController
         }
         if (_model.shield.Value <= 0)
         {
-            var sectorIds = Util.ShuffleList(Util.getSource( 0, 8 )).Take(targetCount);
+            var goodSectors = _model.sectors.Where(s => s.health > 0).Select(s => s.position).ToList();
+            var sectorIds = Util.ShuffleList(goodSectors).Take(targetCount);
             damage = (short)(damageSector / targetCount);
 
             for (int i = 0; i < targetCount; i++)
