@@ -50,7 +50,7 @@ namespace Model
             {
                 var random = new System.Random();
                 var meteorSize = random.Next(0, 3);
-                time += random.Next(15, 25);
+                time += random.Next(30, 45);
                 data[i] = new MeteorData { timeSeconds = time, size = (byte)meteorSize, combo = createCombo(meteorSize) };
             }
 

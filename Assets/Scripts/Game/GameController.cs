@@ -360,16 +360,16 @@ public class GameController
 
     private void Collide(byte meteorSize)
     {
-        short damage = 150;
+        short damage = 300;
         byte targetCount = 2;
         if( meteorSize == 1)
         {
-            damage = 350;
+            damage = 700;
             targetCount = 3;
         }
         else if( meteorSize == 2)
         {
-            damage = 600;
+            damage = 900;
             targetCount = 4;
         }
 

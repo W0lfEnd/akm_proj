@@ -19,9 +19,9 @@ public class MeteorColisionHintsPanel : MonoBehaviour
         int hint_time = 0;
         switch ( nearest_meteor.size )
         {
-            case 0: hint_time = 6; break;
-            case 1: hint_time = 9; break;
-            case 2: hint_time = 12; break;
+            case 0: hint_time = 20; break;
+            case 1: hint_time = 25; break;
+            case 2: hint_time = 30; break;
         }
         
         if ( nearest_meteor.timeSeconds - Client.client.Model.currentTime.Value < hint_time )
@@ -41,6 +41,8 @@ public class MeteorColisionHintsPanel : MonoBehaviour
                 meteor_combo_hint.text += "<color=\"green\">" + variable;
             else
                 meteor_combo_hint.text += variable;
+
+            meteor_combo_hint.text += " ";
         }
     }
     

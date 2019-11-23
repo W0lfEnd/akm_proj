@@ -30,4 +30,17 @@ public class SpaceShipManager : MonoBehaviour
   {
     ship_anim.SetTrigger( "MeteorDamage" );
   }
+
+  public int old_hp = -1000;
+  private void Update()
+  {
+    if ( Client.client == null || Client.client.Model == null )
+      return;
+    
+    if ( Client.client.Model.health.Value <= 0 )
+      destroyByMeteor();
+    
+    //if( old_hp != -1000 && old_hp > Client.client.Model.health.Value )
+      
+  }
 }
