@@ -20,7 +20,7 @@ namespace Model
                 currentTime    = new ObservedValue<int>( 0 ),
                 iteration      = new ObservedValue<int>( 0 )
             };
-            model.startCombo = Util.ShuffleList(Util.getSource(0, 4)).ToArray();
+            model.startCombo = new byte[] {0, 1, 2, 3 }; //Util.ShuffleList(Util.getSource(0, 4)).ToArray();
             
             model.panels = new Panel[countPanel];
 
