@@ -166,7 +166,7 @@ public class GameController
 
     private void moveShipToTarget()
     {
-        Vector2 res_in_float = Vector2.MoveTowards( _model.curPosition.Value, _model.targetPosition.Value, Time.fixedDeltaTime * 3000 );
+        Vector2 res_in_float = Vector2.MoveTowards( _model.curPosition.Value, _model.targetPosition.Value, Time.fixedDeltaTime * _model.speed.Value * 10 );
         _model.curPosition.Value = new Vector2Int( (int)res_in_float.x, (int)res_in_float.y );
     }
 
