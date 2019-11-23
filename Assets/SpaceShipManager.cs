@@ -39,8 +39,10 @@ public class SpaceShipManager : MonoBehaviour
     
     if ( Client.client.Model.health.Value <= 0 )
       destroyByMeteor();
-    
-    //if( old_hp != -1000 && old_hp > Client.client.Model.health.Value )
-      
+    else
+      if ( old_hp != -1000 && old_hp > Client.client.Model.health.Value )
+        meteorDamage();
+
+    old_hp = Client.client.Model.health.Value;
   }
 }
