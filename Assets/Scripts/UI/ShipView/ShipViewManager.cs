@@ -30,6 +30,9 @@ public class ShipViewManager : MonoBehaviour
 
   private void slowMoveBackground()
   {
+    if ( Client.client != null && Client.client.Model != null )
+      speed_parallax = Client.client.Model.speed.Value / 10f;
+
     foreach ( RectTransform back in backgrounds )
     {
       back.Translate( speed_parallax * Time.deltaTime * Vector2.left );
