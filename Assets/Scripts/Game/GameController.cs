@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameController
 {
-    private enum ButtonActionType: byte
+    public enum ButtonActionType: byte
     {
         ComboBtn1Id = 0,
         ComboBtn2Id = 1,
@@ -17,7 +17,8 @@ public class GameController
 
         ChangeSppedId = 5,
 
-        PressFire = 6,
+        MapOutputId = 6,
+        ShipStateOutputId = 7,
 
         ComboManeuver1Id = 10,
         ComboManeuver2Id = 11,
@@ -31,31 +32,27 @@ public class GameController
     private GameModel _model;
     private Map _map;
     private int _meteorIteration = 0;
-    private float startTime = 0;
+    private int _time = 0;
 
     public GameController()
     {
-        _model = StartGameModelGenerator.Generate(3, 4);
-        _model.gameState = GameState.INIT;
-
         _map = new Map();
+
+        _model = StartGameModelGenerator.Generate(5, 4);
+        _model.gameState.Value = GameState.INIT;
+
+        _model.maneverComboValidState = new bool[_map.meteorsData[0].combo.Length];
     }
 
-    public void DoIteration(float time)
+    public void DoMeteorIteration()
     {
-        if (_model.gameState == GameState.RUN)
+        _model.gameState.Value = GameState.RUN;
+        if (_model == null || _model.gameState.Value != GameState.RUN)
         {
             return;
         }
 
-        if (startTime == 0)
-        {
-            startTime = time;
-            _model.currentTime = Convert.ToInt32(time * 1000);
-        }
-        // todo: time
-        // _model.currentTime = time * 1000 - startTime
-        if (Convert.ToInt32(_model.currentTime) == _map.meteorsData[_meteorIteration].timeSeconds)
+        if (_model.currentTime.Value == _map.meteorsData[_meteorIteration].timeSeconds)
         {
             var combo = _map.meteorsData[_meteorIteration].combo;
             var result = new bool[combo.Length];
@@ -69,7 +66,7 @@ public class GameController
                         if (combo[i] == element.id)
                         {
                             result[i] = element.inputValue == element.maxValue;
-                            if(!result[i])
+                            if (!result[i])
                             {
                                 goto Label;
                             }
@@ -77,23 +74,83 @@ public class GameController
                     }
                 }
 
-                Label:
+            Label:
                 Collide(_map.meteorsData[_meteorIteration].size);
                 break;
-            } 
+            }
             ++_meteorIteration;
-            _model.iteration = _meteorIteration;
+            _model.iteration.Value = _meteorIteration;
+            _model.maneverComboValidState = new bool[_map.meteorsData[_meteorIteration].combo.Length];
+        }
+    }
+
+    public void DoIterationOnEachSeconds()
+    {
+        _model.gameState.Value = GameState.RUN;
+        if ( _model == null || _model.gameState.Value != GameState.RUN )
+        {
+            return;
         }
 
-        IncreaseShield();
+        if (_model.curPosition == _model.targetPosition)
+        {
+            _model.speed.Value = 0;
+        }
 
-        if (_model.health >= MAX_VALUE)
+        _model.health.Value = (short)_model.sectors.Sum(s => s.health);
+        moveShipToTarget();
+
+        IncreaseShield();
+        CalcOxygen();
+        CalcSectorHealth();
+        ++_time;
+        _model.currentTime.Value = _time;
+        _model.health.Value = (short)_model.sectors.Sum(s => s.health);
+    }
+
+    private void CalcOxygen()
+    {
+        var oxygenDamageCount = (byte)_model.sectors.Count(s => s.health <= 30);
+
+        if ( oxygenDamageCount == 0 )
         {
             InscreaseOxygen();
         }
         else
         {
-            DecreaseOxygen();
+            DecreaseOxygen(oxygenDamageCount);
+        }
+    }
+
+    private void CalcSectorHealth()
+    {
+        for (int i = 0; i < _model.sectors.Length; i++)
+        {
+            if (_model.sectors[i].isFire)
+            {
+                var dmg = _model.sectors[i].health - 4;
+                if (dmg <= 0)
+                {
+                    _model.sectors[i].health = 0;
+                }
+                else
+                {
+                    _model.sectors[i].health -= 4;
+                }
+            }
+
+            if (_model.sectors[i].isRepairing)
+            {
+                var h = _model.sectors[i].health + 5;
+                if (h > 100)
+                {
+                    _model.sectors[i].health = 100;
+                }
+                else
+                {
+                    _model.sectors[i].health += 5;
+                }
+            }
         }
     }
 
@@ -107,23 +164,40 @@ public class GameController
         return _model;
     }
 
+    private void moveShipToTarget()
+    {
+        Vector2 res_in_float = Vector2.MoveTowards( _model.curPosition.Value, _model.targetPosition.Value, Time.fixedDeltaTime * _model.speed.Value * 10 );
+        _model.curPosition.Value = new Vector2Int( (int)res_in_float.x, (int)res_in_float.y );
+    }
+
     public bool ApplyPlayerInput(PlayerInput playerInput)
     {
-        if (playerInput.actionType == PlayerInput.ActionType.ChangePanel)
+        if(playerInput.actionType == PlayerInput.ActionType.ChangePanel)
         {
             return ChangePanel(playerInput);
         }
 
         if(playerInput.actionType == PlayerInput.ActionType.ChangeTarget)
         {
-            _model.targetPosition = playerInput.targetPosition;
+            _model.targetPosition.Value = playerInput.targetPosition;
             return true;
+        }
+
+        if( playerInput.actionType == PlayerInput.ActionType.FightFire)
+        {
+            _model.sectors[playerInput.sectorPosition].isFire = false;
+        }
+
+        if(playerInput.actionType == PlayerInput.ActionType.Repair)
+        {
+            _model.sectors[playerInput.sectorPosition].isRepairing = true;
         }
         
         if (!ValidInputElement(playerInput, out InputElement inputElement))
         {
             return false;
         }
+        inputElement.inputValue = playerInput.inputValue;
 
         var actionType = (ButtonActionType)inputElement.id;
 
@@ -136,20 +210,13 @@ public class GameController
                 SetRunCombination(inputElement);
                 break;
             case ButtonActionType.RunBtnId:
-                if (_model.gameState == GameState.PREPARE)
+                if (_model.gameState.Value == GameState.PREPARE)
                 {
-                    _model.gameState = GameState.RUN;
+                    _model.gameState.Value = GameState.RUN;
                 }
                 break;
             case ButtonActionType.ChangeSppedId:
-                var speed = Convert.ToByte(inputElement.inputValue * 10);
-                if(_model.gameState == GameState.RUN && (speed > MAX_VALUE || speed < 0))
-                {
-                    return false;
-                }
-                _model.speed = speed;
-                break;
-            case ButtonActionType.PressFire:
+                _model.speed.Value = (byte)(inputElement.inputValue * 10);
                 break;
             case ButtonActionType.ComboManeuver1Id:
             case ButtonActionType.ComboManeuver2Id:
@@ -157,6 +224,44 @@ public class GameController
             case ButtonActionType.ComboManeuver4Id:
             case ButtonActionType.ComboManeuver5Id:
             case ButtonActionType.ComboManeuver6Id:
+                var combo = _map.meteorsData[_model.iteration.Value].combo;
+                var index = Array.FindIndex(combo, i => i == (byte)actionType);
+                if ( index == -1 || _model.maneverComboValidState.All( c => c == true))
+                {
+                    return true;
+                }
+
+                for (int i = 0; i < _model.maneverComboValidState.Length; i++)
+                {
+                    if(_model.maneverComboValidState[i])
+                    {
+                        continue;
+                    }
+
+                    if (index == i)
+                    {
+                        _model.maneverComboValidState[index] = true;
+                    }
+                    else
+                    {
+                        _model.maneverComboValidState = new bool[combo.Length];
+                        for (int c = 0; c < combo.Length; c++)
+                        {
+                            for (int p = 0; p < _model.panels.Length; p++)
+                            {
+                                for (int e = 0; e < _model.panels[p].inputElements.Length; e++)
+                                {
+                                    var element = _model.panels[p].inputElements[e];
+                                    if (combo[c] == element.id)
+                                    {
+                                        element.inputValue = 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 break;
             default: return false;
         }
@@ -201,10 +306,11 @@ public class GameController
 
     private bool SetRunCombination(InputElement inputElement)
     {
-        if (_model.gameState == GameState.RUN)
+        if (_model.gameState.Value == GameState.RUN)
         {
             return true;
         }
+
         List<InputElement> inputs = new List<InputElement>();
         for (int i = 0; i < _model.panels.Length; i++)
         {
@@ -247,69 +353,98 @@ public class GameController
         }
         if (countGoodIteration == _model.startCombo.Length)
         {
-            _model.gameState = GameState.PREPARE;
+            _model.gameState.Value = GameState.PREPARE;
         }
         return true;
     }
 
     private void Collide(byte meteorSize)
     {
-        byte damage = 20;
+        short damage = 300;
+        byte targetCount = 2;
         if( meteorSize == 1)
         {
-            damage = 40;
+            damage = 700;
+            targetCount = 3;
         }
         else if( meteorSize == 2)
         {
-            damage = 60;
+            damage = 900;
+            targetCount = 4;
         }
 
-        _model.shield -= damage;
+        var damageSector = _model.shield.Value - damage;
 
-        if (_model.shield <= 0)
+        if (damageSector <= 0)
         {
-            _model.health -= _model.shield;
-            _model.shield = 0;
+            _model.shield.Value = 0;
+            damageSector = Math.Abs(damageSector);
+        }
+        else
+        {
+            _model.shield.Value -= damage;
+        }
+        if (_model.shield.Value <= 0)
+        {
+            var goodSectors = _model.sectors.Where(s => s.health > 0).Select(s => s.position).ToList();
+            var sectorIds = Util.ShuffleList(goodSectors).Take(targetCount);
+            damage = (short)(damageSector / targetCount);
+
+            for (int i = 0; i < targetCount; i++)
+            {
+                var sector = _model.sectors.FirstOrDefault(s => sectorIds.Contains(s.position));
+                if (sector == null)
+                {
+                    _model.gameState.Value = GameState.LOSE;
+                    return;
+                }
+                if (damage > sector.health)
+                {
+                    sector.health = 0;
+                }
+                else
+                {
+                    sector.health -= (byte)damage;
+                }
+                sector.isFire = new System.Random().Next(0, 10) < 4;
+            }
         }
 
-        if (_model.health <= 0)
+        if (_model.health.Value <= 0)
         {
-            _model.gameState = GameState.LOSE;
+            _model.gameState.Value = GameState.LOSE;
         }
     }
 
     private void IncreaseShield()
     {
-        if (_model.oxygen >= MAX_VALUE)
+        if (_model.shield.Value >= 800 || _model.sectors.First( s => s.sectorType == SectorType.shield ).health == 0 )
         {
             return;
         }
-        _model.shield += 1;
+        _model.shield.Value += 1;
     }
 
     private void InscreaseOxygen()
     {
-        if (_model.oxygen >= MAX_VALUE)
+        if (_model.oxygen.Value >= MAX_VALUE )
         {
             return;
         }
-        _model.oxygen += 1;
+        _model.oxygen.Value += 1;
     }
 
-    private void DecreaseOxygen()
+    private void DecreaseOxygen( byte value )
     {
-        if (_model.oxygen <= 0)
+        _model.oxygen.Value -= value;
+
+        if (_model.oxygen.Value <= 0)
         {
-            _model.gameState = GameState.LOSE;
+            _model.gameState.Value = GameState.LOSE;
             return;
         }
 
-        _model.oxygen -= 1;
-    }
-
-    private void ChooseTargetPoition(Vector2Int target)
-    {
-        _model.targetPosition = target;
+        _model.oxygen.Value -= 1;
     }
 }
 

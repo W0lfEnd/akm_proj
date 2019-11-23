@@ -3,7 +3,7 @@
     public class Panel
     {
         public byte id;
-        public int ownerId;
+        public long ownerId;
         public InputElement[] inputElements;
     }
 }

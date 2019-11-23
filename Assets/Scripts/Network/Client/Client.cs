@@ -2,53 +2,49 @@
 using Model;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-//using static WebSocketPlugin;
 
 public class Client : MonoBehaviour, IClient
 {
     [SerializeField] private TMP_InputField txtIP;
     [SerializeField] private TMP_InputField txtPort;
+    [SerializeField] private TMP_InputField txtName;
 
     public static IClient client;
 
     public GameModel Model { get; set; }
     public Map Map { get; set; }
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     private NetClient _client;
     private NetConnection _connection;
-    //private WebSocketPlugin _client;
     private PacketHandlerManager _packetHandlerManager;
     private bool _isConnected;
+
+    public Dictionary<long, string> otherClients = new Dictionary<long, string>();
 
     public void Send(PlayerInput playerInput)
     {
         var message = _client.CreateMessage();
         message.Write(PacketFactory.CreatePacketByType( PacketType.C2S_Input, playerInput).GetData());
         _client.SendMessage(message, _connection, NetDeliveryMethod.ReliableOrdered);
-        //_client.Send(PacketFactory.CreatePacketByType(PacketType.C2S_Input, playerInput).GetData());
     }
 
-    public void Connect()
+    public void Connect( bool isLocal )
     {
-        var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonConstants.DefaultIPAddress : txtIP.text;
-        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonConstants.DefaultServerPort : txtPort.text;
+        var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) || isLocal ? CommonData.DefaultIPAddress : txtIP.text;
+        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonData.DefaultServerPort : txtPort.text;
 
-        /*var uri = new Uri($"ws://{host}:{port}/{CommonConstants.DefaultHostName}");
-        _client = new WebSocketPlugin(uri);
-        _client.ChangeStateEvent += OnChangeState;
-        _client.Connect();*/
-
-        var config = new NetPeerConfiguration(CommonConstants.DefaultHostName);
-        config.Port = Convert.ToUInt16(CommonConstants.DefaultClientPort);
+        var config = new NetPeerConfiguration(CommonData.DefaultHostName);
+        config.Port = Convert.ToUInt16(CommonData.DefaultClientPort);
         config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
 
         _client = new NetClient(config);
         _client.Start();
         
-        NetOutgoingMessage message = _client.CreateMessage(CommonConstants.DefaultHostName);
+        NetOutgoingMessage message = _client.CreateMessage(CommonData.DefaultHostName);
         _connection = _client.Connect(host, Convert.ToUInt16(port), message);
         print("Clinet connecting ...");
 
@@ -62,6 +58,12 @@ public class Client : MonoBehaviour, IClient
             yield return null;
         }
         _isConnected = true;
+        Id = _client.UniqueIdentifier;
+        var name = txtName == null || string.IsNullOrWhiteSpace( txtName.text) ? CommonData.NickName : txtName.text;
+
+        var message = _client.CreateMessage();
+        message.Write(PacketFactory.CreatePacketByType(PacketType.C2S_Join, new Tuple<long, string>(Id, name)).GetData());
+        _client.SendMessage(message, NetDeliveryMethod.ReliableOrdered);
     }
 
     private void Awake()
@@ -73,7 +75,7 @@ public class Client : MonoBehaviour, IClient
 
         _isConnected = false;
         _packetHandlerManager = new PacketHandlerManager();
-        _packetHandlerManager.AddHandler(PacketType.S2C_SendId, new SendIdPacketHandler());
+        _packetHandlerManager.AddHandler(PacketType.S2C_Joined, new JoinedPacketHandler());
         _packetHandlerManager.AddHandler(PacketType.S2C_Map, new MapPacketHandler());
         _packetHandlerManager.AddHandler(PacketType.S2C_Model, new GameModelPacketHandler());
     }

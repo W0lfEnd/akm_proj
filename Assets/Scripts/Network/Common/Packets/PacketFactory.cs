@@ -32,12 +32,16 @@ public class PacketFactory
                 }
                 savePalyerInput(packet, playerInput);
                 break;
-            case PacketType.S2C_SendId:
-                if (!int.TryParse( context.ToString(), out int id))
+            case PacketType.C2S_Join:
+            case PacketType.S2C_Joined:
+                var joinedInfo = context as Tuple<long, string>;
+                if( joinedInfo == null )
                 {
-                    
+                    throw new Exception($"{nameof(context)} is not type {nameof(Tuple<long, string>)}");
                 }
-                packet.Buffer.Write(id);
+                packet.Buffer.Write(joinedInfo.Item1);
+                packet.Buffer.Write((byte)joinedInfo.Item2.Length);
+                packet.Buffer.Write(System.Text.Encoding.UTF8.GetBytes(joinedInfo.Item2));
                 break;
             default: throw new Exception("NotSuported type of packet");
 
@@ -70,25 +74,31 @@ public class PacketFactory
 
     private static void saveModelToPacket(Packet packet, GameModel model)
     {
-        packet.Buffer.Write((byte)model.gameState);
-        packet.Buffer.Write(model.currentTime);
-        packet.Buffer.Write(model.health);
-        packet.Buffer.Write(model.shield);
-        packet.Buffer.Write(model.oxygen);
-        packet.Buffer.Write(model.speed);
-        packet.Buffer.Write(model.petrol);
+        packet.Buffer.Write((byte)model.gameState.Value);
+        packet.Buffer.Write(model.currentTime.Value);
+        packet.Buffer.Write(model.health.Value);
+        packet.Buffer.Write(model.shield.Value);
+        packet.Buffer.Write(model.oxygen.Value);
+        packet.Buffer.Write(model.speed.Value);
+        packet.Buffer.Write(model.petrol.Value);
 
-        packet.Buffer.Write(model.curPosition.x);
-        packet.Buffer.Write(model.curPosition.y);
-        packet.Buffer.Write(model.targetPosition.x);
-        packet.Buffer.Write(model.targetPosition.y);
+        packet.Buffer.Write(model.curPosition.Value.x);
+        packet.Buffer.Write(model.curPosition.Value.y);
+        packet.Buffer.Write(model.targetPosition.Value.x);
+        packet.Buffer.Write(model.targetPosition.Value.y);
 
         packet.Buffer.Write(model.startCombo[0]);
         packet.Buffer.Write(model.startCombo[1]);
         packet.Buffer.Write(model.startCombo[2]);
         packet.Buffer.Write(model.startCombo[3]);
 
-        packet.Buffer.Write(model.iteration);
+        packet.Buffer.Write(model.iteration.Value);
+
+        packet.Buffer.Write((byte)model.maneverComboValidState.Length);
+        for (int i = 0; i < model.maneverComboValidState.Length; i++)
+        {
+            packet.Buffer.Write(model.maneverComboValidState[i]);
+        }
 
         packet.Buffer.Write((byte)model.panels.Length);
         for (int i = 0; i < model.panels.Length; i++)
@@ -106,6 +116,16 @@ public class PacketFactory
                 packet.Buffer.Write(model.panels[i].inputElements[j].inputValue);
             }
         }
+
+        packet.Buffer.Write((byte)model.sectors.Length);
+        for (int i = 0; i < model.sectors.Length; i++)
+        {
+            packet.Buffer.Write(model.sectors[i].position);
+            packet.Buffer.Write((byte)model.sectors[i].sectorType);
+            packet.Buffer.Write(model.sectors[i].health);
+            packet.Buffer.Write(model.sectors[i].isFire);
+            packet.Buffer.Write(model.sectors[i].isRepairing);
+        }
     }
 
     private static void savePalyerInput(Packet packet, PlayerInput playerInput)
@@ -117,5 +137,6 @@ public class PacketFactory
         packet.Buffer.Write(playerInput.inputValue);
         packet.Buffer.Write(playerInput.targetPosition.x);
         packet.Buffer.Write(playerInput.targetPosition.y);
+        packet.Buffer.Write(playerInput.sectorPosition);
     }
 }

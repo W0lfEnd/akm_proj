@@ -5,36 +5,55 @@ namespace Model
 {
     public static class StartGameModelGenerator
     {
-        private static byte id;
-
         public static GameModel Generate(byte countPanel, byte countInputOnPanel, byte startValue = 100)
         {
             GameModel model = new GameModel
             {
-                gameState = GameState.NONE,
-                shield = startValue,
-                oxygen = startValue,
-                petrol = startValue,
-                health = startValue,
-                curPosition = new Vector2Int(0, 0),
-                targetPosition = new Vector2Int(0, 0),
-                speed = 0,
-                currentTime = 0,
-                iteration = 0
+                gameState      = new ObservedValue<GameState>( GameState.NONE ),
+                shield         = new ObservedValue<short>( 800 ),
+                health         = new ObservedValue<short>( 800 ),
+                oxygen         = new ObservedValue<byte>( startValue ),
+                petrol         = new ObservedValue<byte>( startValue ),
+                curPosition    = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
+                targetPosition = new ObservedValue<Vector2Int>( new Vector2Int( 0, 0 ) ),
+                speed          = new ObservedValue<byte>( 0 ),//TODO remove hardcoded speed by dynamicly changed
+                currentTime    = new ObservedValue<int>( 0 ),
+                iteration      = new ObservedValue<int>( 0 )
             };
-            model.startCombo = Util.ShuffleList(0, 4).ToArray();
-
+            model.startCombo = new byte[] {0, 1, 2, 3 }; //Util.ShuffleList(Util.getSource(0, 4)).ToArray();
+            
             model.panels = new Panel[countPanel];
 
             InputElement[] inputElements = createInputElements();
+            var panelIds = new byte[]{ 0, 1, 2, 3, 4 };//Util.ShuffleList(Util.getSource(0, 5));
 
-            for (byte i = 0; i < countPanel; i++)
+            for (byte i = 0; i < 3; i++)
             {
                 InputElement[] inputs = inputElements.Skip(i * countInputOnPanel).Take(countInputOnPanel).ToArray();
-                model.panels[i] = generatePanel(i, inputs);
+                model.panels[i] = generatePanel(panelIds[i], inputs);
             }
 
+            model.panels[3] = new Panel { id = panelIds[3], ownerId = -1, inputElements = new InputElement[] { new InputElement { id = 6, groupId = 100, inputType = InputType.Output, inputValue = 0, maxValue = 0 } } };
+            model.panels[4] = new Panel { id = panelIds[4], ownerId = -1, inputElements = new InputElement[] { new InputElement { id = 7, groupId = 200, inputType = InputType.Output, inputValue = 0, maxValue = 0 } } };
+
+            model.sectors = GetSectors();
+
             return model;
+        }
+
+        private static Sector[] GetSectors()
+        {
+            return new Sector[]
+            {
+                new Sector{ position = 0, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 1, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 2, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 3, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 4, sectorType = SectorType.oxygen, health = 100 },
+                new Sector{ position = 5, sectorType = SectorType.empty, health = 100 },
+                new Sector{ position = 6, sectorType = SectorType.shield, health = 100 },
+                new Sector{ position = 7, sectorType = SectorType.empty, health = 100 },
+            };
         }
 
         private static Panel generatePanel(byte id, InputElement[] inputElements )
@@ -102,14 +121,6 @@ namespace Model
                     inputType = InputType.Slider,
                     inputValue = 0,
                     maxValue = 10
-                },
-                new InputElement // fire id
-                {
-                    id = 6,
-                    groupId = 0,
-                    inputType = InputType.Button,
-                    inputValue = 0,
-                    maxValue = 1
                 },
 
                 new InputElement

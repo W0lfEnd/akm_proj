@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace Model
@@ -9,14 +8,17 @@ namespace Model
         public MeteorData[] meteorsData;
         public Vector2Int[] coords;
 
+        public const int MAP_SIZE = 5000;
         public Map()
         {
             coords = new Vector2Int[]
             {
-                new Vector2Int(0, 0),
-                new Vector2Int(6000, 6000),
-                new Vector2Int(4500, 7500),
-                new Vector2Int(3000, 8000)
+                new Vector2Int( 300, 300 ),
+                new Vector2Int( 4000, 1000 ),
+                new Vector2Int( 900, 3700 ),
+                new Vector2Int( 4000, 3500 ),
+                new Vector2Int( 2500, 400 ),
+                new Vector2Int( 1000, 2000 ),
             };
 
             meteorsData = GenerateMeteors();
@@ -37,12 +39,12 @@ namespace Model
                     size = 6;
                 }
 
-                var result = Util.ShuffleList(10, 6).Take(size).ToArray();
+                var result = Util.ShuffleList( Util.getSource(10, 6)).Take(size).ToArray();
                 return result;
             }
 
-            var data = new MeteorData[5];
-            var time = 30;
+            var data = new MeteorData[150];
+            var time = 20;
 
             data[0] = new MeteorData { timeSeconds = time, size = 0, combo = createCombo(0) };
 
@@ -50,7 +52,7 @@ namespace Model
             {
                 var random = new System.Random();
                 var meteorSize = random.Next(0, 3);
-                time += random.Next(20, 45);
+                time += random.Next(30, 45);
                 data[i] = new MeteorData { timeSeconds = time, size = (byte)meteorSize, combo = createCombo(meteorSize) };
             }
 

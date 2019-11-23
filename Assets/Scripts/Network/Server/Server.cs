@@ -1,21 +1,21 @@
 ﻿using Lidgren.Network;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using TMPro;
 using UnityEngine;
-using WebSocketSharp;
-using WebSocketSharp.Server;
 
-public class Server : MonoBehaviour//, ISubscriber
+public class Server : MonoBehaviour
 {
     [SerializeField] private TMP_InputField txtIP; 
     [SerializeField] private TMP_InputField txtPort;
     [SerializeField] private TMP_InputField txtMaxPlayerCount;
     [SerializeField] private Client client;
 
-    //private WebSocketServer _server;
-    private static NetServer _server;
+
+    public NetServer _server;
     private static List<ClientInfo> _clients;
     private PacketHandlerManager _packetHandlerManager;
     private bool _isRun;
@@ -31,11 +31,11 @@ public class Server : MonoBehaviour//, ISubscriber
             return;
         }
 
-        var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonConstants.DefaultIPAddress : txtIP.text;
-        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonConstants.DefaultServerPort : txtPort.text;
-        _maxPlayerCount = txtMaxPlayerCount == null || string.IsNullOrWhiteSpace(txtMaxPlayerCount.text) ? (byte)1 : System.Convert.ToByte(txtMaxPlayerCount);
+        var host = txtIP == null || string.IsNullOrWhiteSpace(txtIP.text) ? CommonData.DefaultIPAddress : txtIP.text;
+        var port = txtPort == null || string.IsNullOrWhiteSpace(txtPort.text) ? CommonData.DefaultServerPort : txtPort.text;
+        _maxPlayerCount = txtMaxPlayerCount == null || string.IsNullOrWhiteSpace(txtMaxPlayerCount.text) ? (byte)1 : System.Convert.ToByte(txtMaxPlayerCount.text);
 
-        NetPeerConfiguration config = new NetPeerConfiguration(CommonConstants.DefaultHostName);
+        NetPeerConfiguration config = new NetPeerConfiguration(CommonData.DefaultHostName);
         config.Port = int.Parse(port);
         config.LocalAddress = NetUtility.Resolve(host);
         config.MaximumConnections = _maxPlayerCount;
@@ -53,15 +53,18 @@ public class Server : MonoBehaviour//, ISubscriber
         _server.RegisterReceivedCallback(ReceiveData);
         _server.Start();
 
+        CommonData.DefaultIPAddress = host;
+
         _gameController = new GameController();
         StartCoroutine(ClientConnect());
+        StartCoroutine(IterationEachSecond());
 
         Debug.Log("Server starting");
     }
 
     IEnumerator ClientConnect()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         if (_server.Status != NetPeerStatus.Running)
         {
@@ -70,8 +73,20 @@ public class Server : MonoBehaviour//, ISubscriber
         else
         {
             Debug.Log("Server started");
-            client.Connect();
+            client.Connect( true );
         }
+    }
+
+    IEnumerator IterationEachSecond()
+    {
+        do
+        {
+            yield return new WaitForSeconds(1);
+            if (_server.Status == NetPeerStatus.Running)
+            {
+                _gameController.DoIterationOnEachSeconds();
+            }
+        } while (true);
     }
 
     private void OnConnect(ClientInfo clientInfo)
@@ -80,12 +95,6 @@ public class Server : MonoBehaviour//, ISubscriber
         if (_clients.Count <= _maxPlayerCount)
         {
             _clients.Add(clientInfo);
-
-            var messageId = _server.CreateMessage();
-            var packetId = PacketFactory.CreatePacketByType(PacketType.S2C_SendId, 1000 + _clients.Count);
-            messageId.Write(packetId.GetData());
-            _server.SendMessage(messageId, clientInfo.NetConnection, NetDeliveryMethod.ReliableOrdered);
-            packetId.Dispose();
 
             var packetMap = PacketFactory.CreatePacketByType(PacketType.S2C_Map, _gameController.GetMap());
             var messageMap = _server.CreateMessage();
@@ -99,12 +108,6 @@ public class Server : MonoBehaviour//, ISubscriber
             _server.SendMessage(messageModel, clientInfo.NetConnection, NetDeliveryMethod.ReliableOrdered);
             packetModel.Dispose();
         }
-    }
-
-    IEnumerator SendMap()
-    {
-        yield return new WaitForSeconds(1);
-        
     }
 
     private void OnDisconnect(ClientInfo clientInfo)
@@ -126,7 +129,7 @@ public class Server : MonoBehaviour//, ISubscriber
             case NetIncomingMessageType.ConnectionApproval:
                 Debug.Log("ConnectionApproval");
                 string secretKey = message.ReadString();
-                if (secretKey == CommonConstants.DefaultHostName)
+                if (secretKey == CommonData.DefaultHostName)
                 {
                     message.SenderConnection.Approve();
                 }
@@ -139,7 +142,6 @@ public class Server : MonoBehaviour//, ISubscriber
             case NetIncomingMessageType.Data:
                 Debug.Log("Data");
                 _packetHandlerManager.RunPacketHandler(message.Data, this);
-                //Receive(message.Data);
                 break;
             case NetIncomingMessageType.StatusChanged:
                 Debug.Log("StatusChanged");
@@ -149,7 +151,7 @@ public class Server : MonoBehaviour//, ISubscriber
                     clientInfo.IpAddress = message.SenderConnection.RemoteEndPoint.Address;
                     clientInfo.Port = (ushort)message.SenderConnection.RemoteEndPoint.Port;
                     clientInfo.NetConnection = message.SenderConnection;
-                    clientInfo.ConnectionId = message.SenderConnection.Peer.UniqueIdentifier.ToString();
+                    clientInfo.ConnectionId = message.SenderConnection.Peer.UniqueIdentifier;
                     _clients.Add(clientInfo);
                     OnConnect(clientInfo);
                 }
@@ -181,14 +183,23 @@ public class Server : MonoBehaviour//, ISubscriber
 
     private void Awake()
     {
-        //SimpleEventBus.SubscribeOnEvent(TopicType.ServiceToServer, EventType.WebSocketDataConnceted, this);
-        //SimpleEventBus.SubscribeOnEvent(TopicType.ServiceToServer, EventType.WebSocketDataDisconnceted, this);
-        //SimpleEventBus.SubscribeOnEvent(TopicType.ServiceToServer, EventType.WebSocketDataReceived, this);
-
         _clients = new List<ClientInfo>();
 
         _packetHandlerManager = new PacketHandlerManager();
         _packetHandlerManager.AddHandler(PacketType.C2S_Input, new PlayerInputPacketHandler());
+        _packetHandlerManager.AddHandler(PacketType.C2S_Join, new JoinPacketHandler());
+
+        if (txtIP != null)
+        {
+            foreach(IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    txtIP.text = ip.MapToIPv4().ToString();
+                    Debug.Log(ip.MapToIPv4().ToString());
+                }
+            }
+        }
     }
 
     private static int iteration = 0;
@@ -196,10 +207,16 @@ public class Server : MonoBehaviour//, ISubscriber
     {
         if (!_isRun) return;
         iteration++;
-        if ( iteration == 10)
+        if ( iteration >= 10)
         {
-            _gameController.DoIteration(Time.realtimeSinceStartup);
             iteration = 0;
+            _gameController.DoMeteorIteration();
+            Debug.Log( "Iterate successful" );
+            var messageModel = _server.CreateMessage();
+            var packetModel = PacketFactory.CreatePacketByType(PacketType.S2C_Model, _gameController.GetModel());
+            messageModel.Write(packetModel.GetData());
+            _server.SendToAll(messageModel, NetDeliveryMethod.ReliableOrdered);
+            packetModel.Dispose();
         }
     }
 }

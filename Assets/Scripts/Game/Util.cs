@@ -3,15 +3,9 @@ using System.Linq;
 
 public static class Util
 {
-    public static List<byte> ShuffleList(byte start, byte count)
+    public static List<T> ShuffleList<T>( List<T> source)
     {
-        List<byte> source = new List<byte>();
-        var range = Enumerable.Range(start, count);
-        foreach (var item in range)
-        {
-            source.Add((byte)item);
-        }
-        List<byte> randomList = new List<byte>();
+        List<T> randomList = new List<T>();
         var r = new System.Random();
         int randomIndex = 0;
 
@@ -23,6 +17,18 @@ public static class Util
         }
 
         return randomList;
+    }
+
+    public static List<byte> getSource( byte start, byte count )
+    {
+        List<byte> source = new List<byte>();
+        var range = Enumerable.Range(start, count);
+        foreach (var item in range)
+        {
+            source.Add((byte)item);
+        }
+
+        return source;
     }
 }
 
