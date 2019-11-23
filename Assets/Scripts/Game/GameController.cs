@@ -392,7 +392,12 @@ public class GameController
 
             for (int i = 0; i < targetCount; i++)
             {
-                var sector = _model.sectors.First(s => sectorIds.Contains(s.position));
+                var sector = _model.sectors.FirstOrDefault(s => sectorIds.Contains(s.position));
+                if (sector == null)
+                {
+                    _model.gameState.Value = GameState.LOSE;
+                    return;
+                }
                 if (damage > sector.health)
                 {
                     sector.health = 0;
