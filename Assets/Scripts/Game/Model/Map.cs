@@ -13,10 +13,12 @@ namespace Model
         {
             coords = new Vector2Int[]
             {
-                new Vector2Int( MAP_SIZE / 5, MAP_SIZE / 5 ),
-                new Vector2Int( MAP_SIZE / 8, MAP_SIZE / 10 ),
-                new Vector2Int( MAP_SIZE / 3, MAP_SIZE / 6 ),
-                new Vector2Int( MAP_SIZE / 54, MAP_SIZE / 23 )
+                new Vector2Int( 300, 300 ),
+                new Vector2Int( 4000, 1000 ),
+                new Vector2Int( 900, 3700 ),
+                new Vector2Int( 4000, 3500 ),
+                new Vector2Int( 2500, 400 ),
+                new Vector2Int( 1000, 2000 ),
             };
 
             meteorsData = GenerateMeteors();

@@ -34,11 +34,11 @@ public class MeteorColisionHintsPanel : MonoBehaviour
         }
 
         meteor_combo_hint.text = "";
-        for ( int index = 0; index < nearest_meteor.combo.Length; index++ )
+        for ( int index = nearest_meteor.combo.Length - 1; index >= 0; index-- )
         {
             byte variable = nearest_meteor.combo[index];
             if ( Client.client.Model.maneverComboValidState[index] )
-                meteor_combo_hint.text += "<color=\"green\">" + variable;
+                meteor_combo_hint.text += "<color=\"green\">" + variable + "</color>";
             else
                 meteor_combo_hint.text += variable;
 
