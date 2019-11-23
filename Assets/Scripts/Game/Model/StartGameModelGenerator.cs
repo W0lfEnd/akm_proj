@@ -122,14 +122,6 @@ namespace Model
                     inputValue = 0,
                     maxValue = 10
                 },
-                new InputElement // fire id
-                {
-                    id = 6,
-                    groupId = 0,
-                    inputType = InputType.Button,
-                    inputValue = 0,
-                    maxValue = 1
-                },
 
                 new InputElement
                 {
