@@ -95,7 +95,7 @@ public class GameController
             _model.speed.Value = 0;
         }
 
-        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
+        _model.health.Value = (short)_model.sectors.Sum(s => s.health);
         moveShipToTarget();
 
         IncreaseShield();
@@ -103,7 +103,7 @@ public class GameController
         CalcSectorHealth();
         ++_time;
         _model.currentTime.Value = _time;
-        _model.health.Value = (ushort)_model.sectors.Sum(s => s.health);
+        _model.health.Value = (short)_model.sectors.Sum(s => s.health);
     }
 
     private void CalcOxygen()
@@ -179,6 +179,7 @@ public class GameController
         {
             return false;
         }
+        inputElement.inputValue = playerInput.inputValue;
 
         var actionType = (ButtonActionType)inputElement.id;
 
@@ -357,11 +358,15 @@ public class GameController
         }
 
         var damageSector = _model.shield.Value - damage;
-        _model.shield.Value -= (ushort)damage;
 
-        if (damageSector < 0 )
+        if (damageSector <= 0)
         {
+            _model.shield.Value = 0;
             damageSector = Math.Abs(damageSector);
+        }
+        else
+        {
+            _model.shield.Value -= damage;
         }
         if (_model.shield.Value <= 0)
         {
@@ -381,7 +386,6 @@ public class GameController
                 }
                 sector.isFire = new System.Random().Next(0, 10) < 4;
             }
-            _model.shield.Value = 0;
         }
 
         if (_model.health.Value <= 0)
