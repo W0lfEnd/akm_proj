@@ -5,7 +5,7 @@ using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.UI;
 
 
-public class SpaceShipPlacesManager : MonoBehaviour
+public class SpaceShipPlacesManager : MonoBehaviourBase
 {
   [SerializeField] private PanelInputs[] btn_places;
   [SerializeField] private Transform[] spawn_point;
@@ -16,9 +16,9 @@ public class SpaceShipPlacesManager : MonoBehaviour
   [SerializeField] private PanelOutput test5;
 
   private long my_id => Client.client.Id;
-  
 
-  private void Start()
+
+  protected override void initMyComponents()
   {
     test1.setPrefix( "speed:" );
     test1.setText( Client.client.Model.speed.Value.ToString() );
@@ -56,7 +56,13 @@ public class SpaceShipPlacesManager : MonoBehaviour
 
   private void Update()
   {
+
+    if ( Client.client != null && Client.client.Model != null )
+      initComponents();
+    else return;
+    
     Debug.Log( Client.client.Model.speed.Value );
+
     
     foreach ( Panel panel in Client.client.Model.panels )
     {

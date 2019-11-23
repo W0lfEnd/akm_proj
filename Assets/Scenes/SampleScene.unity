@@ -502,6 +502,36 @@ PrefabInstance:
       propertyPath: ship_state
       value: 
       objectReference: {fileID: 755112411}
+    - target: {fileID: 8208528038280110102, guid: 41fab6c491643894ab6603c33523bbd4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1754284711013389922, guid: 41fab6c491643894ab6603c33523bbd4,
+        type: 3}
+      propertyPath: ship_state
+      value: 
+      objectReference: {fileID: 755112411}
+    - target: {fileID: 7591291548533865119, guid: 41fab6c491643894ab6603c33523bbd4,
+        type: 3}
+      propertyPath: ship_state
+      value: 
+      objectReference: {fileID: 755112411}
+    - target: {fileID: 4868795596673621833, guid: 41fab6c491643894ab6603c33523bbd4,
+        type: 3}
+      propertyPath: ship_state
+      value: 
+      objectReference: {fileID: 755112411}
+    - target: {fileID: 4877122749944186358, guid: 41fab6c491643894ab6603c33523bbd4,
+        type: 3}
+      propertyPath: ship_state
+      value: 
+      objectReference: {fileID: 755112411}
+    - target: {fileID: 3773780219199759003, guid: 41fab6c491643894ab6603c33523bbd4,
+        type: 3}
+      propertyPath: ship_state
+      value: 
+      objectReference: {fileID: 755112411}
     - target: {fileID: 4981532448737848377, guid: 41fab6c491643894ab6603c33523bbd4,
         type: 3}
       propertyPath: m_IsActive
