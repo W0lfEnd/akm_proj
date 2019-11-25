@@ -9,49 +9,33 @@ public class SpaceShipPlacesManager : MonoBehaviourBase
 {
   [SerializeField] private PanelInputs[] btn_places;
   [SerializeField] private Transform[] spawn_point;
-  [SerializeField] private PanelOutput test1;
-  [SerializeField] private PanelOutput test2;
-  [SerializeField] private PanelOutput test3;
-  [SerializeField] private PanelOutput test4;
-  [SerializeField] private PanelOutput test5;
+  [SerializeField] private PanelOutput[] test_outputs;
 
   private long my_id => Client.client.Id;
 
 
   protected override void initMyComponents()
   {
-    test1.setPrefix( "speed:" );
-    test1.setText( Client.client.Model.speed.Value.ToString() );
-    Client.client.Model.speed.onValueChange += b => test1.setText( b.ToString() );
-    
-    test2.setPrefix( "health:" );
-    test2.setText( Client.client.Model.health.Value.ToString() );
-    Client.client.Model.health.onValueChange += b => test2.setText( b.ToString() );
-    
-    test3.setPrefix( "oxygen:" );
-    test3.setText( Client.client.Model.oxygen.Value.ToString() );
-    Client.client.Model.oxygen.onValueChange += b => test3.setText( b.ToString() );
-    
-    test4.setPrefix( "petrol:" );
-    test4.setText( Client.client.Model.petrol.Value.ToString() );
-    Client.client.Model.petrol.onValueChange += b => test4.setText( b.ToString() );
-    
-    test5.setPrefix( "shield:" );
-    test5.setText( Client.client.Model.shield.Value.ToString() );
-    Client.client.Model.shield.onValueChange += b => test5.setText( b.ToString() );
-    
+    //TEST
+    test_outputs[0].setPrefix( "speed:" );
+    test_outputs[0].setText( Client.client.Model.speed.Value.ToString() );
+    Client.client.Model.speed.onValueChange += b => test_outputs[0].setText( b.ToString() );
 
-    // foreach ( Panel panel in Client.client.Model.panels )
-    // {
-    //   panel.ownerId.onValueChange +=
-    //     value =>
-    //     {
-    //       btn_places[panel.id].GetComponent<Image>().color =
-    //         value == 255 || value == -1 ?new Color( 0.82f, 0.82f, 0.82f ) : value == my_id ? Color.red : Color.green;
-    //       
-    //       btn_places[panel.id].GetComponent<CanvasGroup>().interactable = value == 255 || value == -1;
-    //     };
-    // }
+    test_outputs[1].setPrefix( "health:" );
+    test_outputs[1].setText( Client.client.Model.health.Value.ToString() );
+    Client.client.Model.health.onValueChange += b => test_outputs[1].setText( b.ToString() );
+
+    test_outputs[2].setPrefix( "oxygen:" );
+    test_outputs[2].setText( Client.client.Model.oxygen.Value.ToString() );
+    Client.client.Model.oxygen.onValueChange += b => test_outputs[2].setText( b.ToString() );
+
+    test_outputs[3].setPrefix( "petrol:" );
+    test_outputs[3].setText( Client.client.Model.petrol.Value.ToString() );
+    Client.client.Model.petrol.onValueChange += b => test_outputs[30].setText( b.ToString() );
+
+    test_outputs[4].setPrefix( "shield:" );
+    test_outputs[4].setText( Client.client.Model.shield.Value.ToString() );
+    Client.client.Model.shield.onValueChange += b => test_outputs[4].setText( b.ToString() );
   }
 
   private void Update()
