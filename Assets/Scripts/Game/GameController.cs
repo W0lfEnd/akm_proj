@@ -436,15 +436,16 @@ public class GameController
 
     private void DecreaseOxygen( byte value )
     {
-        _model.oxygen.Value -= value;
-
-        if (_model.oxygen.Value <= 0)
+        var dmg = _model.oxygen.Value - value;
+        if (dmg <= 0)
         {
+            _model.oxygen.Value = 0;
             _model.gameState.Value = GameState.LOSE;
-            return;
         }
-
-        _model.oxygen.Value -= 1;
+        else
+        {
+            _model.oxygen.Value -= value;
+        }
     }
 }
 
