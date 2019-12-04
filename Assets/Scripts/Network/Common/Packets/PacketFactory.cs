@@ -1,5 +1,6 @@
 ﻿using Model;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 public class PacketFactory
@@ -34,13 +35,20 @@ public class PacketFactory
                 savePalyerInput(packet, playerInput);
                 break;
             case PacketType.C2S_Join:
-            case PacketType.S2C_Joined:
-                var joinedInfo = context as Tuple<long, string>;
-                if( joinedInfo == null )
+                var joinInfo = context as Tuple<long, string>;
+                if( joinInfo == null )
                 {
                     throw new Exception($"{nameof(context)} is not type {nameof(Tuple<long, string>)}");
                 }
-                saveJionInfo(packet, joinedInfo);
+                saveJoinInfo(packet, joinInfo);
+                break;
+            case PacketType.S2C_Joined:
+                var joinedInfo = context as List<Tuple<long, string>>;
+                if (joinedInfo == null)
+                {
+                    throw new Exception($"{nameof(context)} is not type {nameof(List<Tuple<long, string>>)}");
+                }
+                saveJoinedInfos(packet, joinedInfo);
                 break;
             case PacketType.S2C_ServerInfo:
                 var serverInfo = context as ServerInfo;
@@ -147,7 +155,7 @@ public class PacketFactory
         packet.Buffer.Write(playerInput.sectorPosition);
     }
 
-    private static void saveJionInfo( Packet packet, Tuple<long, string> joinInfo)
+    private static void saveJoinInfo( Packet packet, Tuple<long, string> joinInfo)
     {
         packet.Buffer.Write(joinInfo.Item1);
         packet.Buffer.Write((byte)joinInfo.Item2.Length);
@@ -163,5 +171,17 @@ public class PacketFactory
         packet.Buffer.Write(serverInfo.port);
         packet.Buffer.Write(serverInfo.count);
         packet.Buffer.Write(serverInfo.maxCount);
+    }
+
+    private static void saveJoinedInfos(Packet packet, List<Tuple<long, string>> joinedInfos)
+    {
+        packet.Buffer.Write((byte)joinedInfos.Count);
+        for (int i = 0; i < joinedInfos.Count; i++)
+        {
+            packet.Buffer.Write(joinedInfos[i].Item1);
+            packet.Buffer.Write((byte)joinedInfos[i].Item2.Length);
+            packet.Buffer.Write(Encoding.UTF8.GetBytes(joinedInfos[i].Item2));
+        }
+        
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Lidgren.Network;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +23,8 @@ public class Server : MonoBehaviour
 
     public GameController GameController => _gameController;
 
+    public IEnumerable<KeyValuePair<long, string>> clientInfos => client.otherClients.Concat(new List<KeyValuePair<long, string>> { new KeyValuePair<long, string>(client.Id, client.Nickname) });
+
     public void Run()
     {
         if (_server != null && (_server.Status == NetPeerStatus.Running || _server.Status == NetPeerStatus.Starting))
@@ -47,7 +48,6 @@ public class Server : MonoBehaviour
         config.EnableMessageType(NetIncomingMessageType.WarningMessage);
         config.EnableMessageType(NetIncomingMessageType.ErrorMessage);
         config.EnableMessageType(NetIncomingMessageType.Error);
-
 
         _server = new NetServer(config);
         _server.RegisterReceivedCallback(ReceiveData);

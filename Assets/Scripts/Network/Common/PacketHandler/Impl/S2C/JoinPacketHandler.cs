@@ -1,5 +1,6 @@
 ﻿using Lidgren.Network;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -15,10 +16,17 @@ public class JoinPacketHandler : IPacketHandler
 
             Debug.Log($"JOIN id: {id} name: {name}");
 
+            var clientInfos = new List<Tuple<long, string>>();
+            foreach (KeyValuePair<long, string> item in server.clientInfos)
+            {
+                clientInfos.Add(new Tuple<long, string>(item.Key, item.Value));
+            }
+
             var messageId = server._server.CreateMessage();
-            var packetId = PacketFactory.CreatePacketByType(PacketType.S2C_Joined, new Tuple<long, string>(id, name) );
+            var packetId = PacketFactory.CreatePacketByType(PacketType.S2C_Joined, clientInfos);
             messageId.Write(packetId.GetData());
             server._server.SendToAll(messageId, NetDeliveryMethod.ReliableOrdered);
+
             packetId.Dispose();
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using UnityEngine;
 
 public class JoinedPacketHandler : IPacketHandler
 {
@@ -7,18 +6,18 @@ public class JoinedPacketHandler : IPacketHandler
     {
         if (source is Client client)
         {
-            var id = reader.ReadInt64();
-            if( client.Id == id )
+            var count = reader.ReadByte();
+
+            for (int i = 0; i < count; i++)
             {
-                Debug.Log($"JOINED id: {id}");
-                return;
+                var id = reader.ReadInt64();
+                var nameSize = reader.ReadByte();
+                var name = System.Text.Encoding.UTF8.GetString(reader.ReadBytes(nameSize));
+                if (client.Id != id)
+                {
+                    client.otherClients[id] = name;
+                }
             }
-
-            var nameSize = reader.ReadByte();
-            var name = System.Text.Encoding.UTF8.GetString(reader.ReadBytes(nameSize));
-            client.otherClients[id] = name;
-
-            Debug.Log($"JOINED id: {id} name: {name}");
         }
     }
 }

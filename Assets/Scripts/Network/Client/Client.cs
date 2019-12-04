@@ -17,6 +17,8 @@ public class Client : MonoBehaviour, IClient
     public GameModel Model { get; set; }
     public Map Map { get; set; }
     public long Id { get; set; }
+    public string Nickname => txtName.text;
+
 
     private NetClient _client;
     private NetConnection _connection;
