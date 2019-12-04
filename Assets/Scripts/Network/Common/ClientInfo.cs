@@ -1,12 +1,10 @@
 ﻿using Lidgren.Network;
 using System.Net;
-using WebSocketSharp;
 
 public class ClientInfo
 {
     public IPAddress IpAddress;
     public ushort Port;
-    public WebSocket Socket;
     public long ConnectionId;
     public NetConnection NetConnection;
 

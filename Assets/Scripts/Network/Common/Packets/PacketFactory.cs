@@ -1,5 +1,6 @@
 ﻿using Model;
 using System;
+using System.Text;
 
 public class PacketFactory
 {
@@ -39,9 +40,15 @@ public class PacketFactory
                 {
                     throw new Exception($"{nameof(context)} is not type {nameof(Tuple<long, string>)}");
                 }
-                packet.Buffer.Write(joinedInfo.Item1);
-                packet.Buffer.Write((byte)joinedInfo.Item2.Length);
-                packet.Buffer.Write(System.Text.Encoding.UTF8.GetBytes(joinedInfo.Item2));
+                saveJionInfo(packet, joinedInfo);
+                break;
+            case PacketType.S2C_ServerInfo:
+                var serverInfo = context as ServerInfo;
+                if (serverInfo == null)
+                {
+                    throw new Exception($"{nameof(context)} is not type {nameof(ServerInfo)}");
+                }
+                saveServerInfo(packet, serverInfo);
                 break;
             default: throw new Exception("NotSuported type of packet");
 
@@ -138,5 +145,23 @@ public class PacketFactory
         packet.Buffer.Write(playerInput.targetPosition.x);
         packet.Buffer.Write(playerInput.targetPosition.y);
         packet.Buffer.Write(playerInput.sectorPosition);
+    }
+
+    private static void saveJionInfo( Packet packet, Tuple<long, string> joinInfo)
+    {
+        packet.Buffer.Write(joinInfo.Item1);
+        packet.Buffer.Write((byte)joinInfo.Item2.Length);
+        packet.Buffer.Write(Encoding.UTF8.GetBytes(joinInfo.Item2));
+    }
+
+    private static void saveServerInfo(Packet packet, ServerInfo serverInfo)
+    {
+        packet.Buffer.Write((byte)serverInfo.serverId.Length);
+        packet.Buffer.Write(Encoding.UTF8.GetBytes(serverInfo.serverId));
+        packet.Buffer.Write((byte)serverInfo.host.Length);
+        packet.Buffer.Write(Encoding.UTF8.GetBytes(serverInfo.host));
+        packet.Buffer.Write(serverInfo.port);
+        packet.Buffer.Write(serverInfo.count);
+        packet.Buffer.Write(serverInfo.maxCount);
     }
 }

@@ -24,12 +24,22 @@ public class Client : MonoBehaviour, IClient
     private bool _isConnected;
 
     public Dictionary<long, string> otherClients = new Dictionary<long, string>();
+    public List<ServerInfo> availableServers = new List<ServerInfo>();
 
     public void Send(PlayerInput playerInput)
     {
         var message = _client.CreateMessage();
         message.Write(PacketFactory.CreatePacketByType( PacketType.C2S_Input, playerInput).GetData());
         _client.SendMessage(message, _connection, NetDeliveryMethod.ReliableOrdered);
+    }
+
+    public void StartFoundServer()
+    {
+        if(_client == null)
+        {
+            return;
+        }
+        _client.DiscoverLocalPeers(Convert.ToInt32(CommonData.DefaultServerPort));
     }
 
     public void Connect( bool isLocal )
@@ -78,19 +88,26 @@ public class Client : MonoBehaviour, IClient
         _packetHandlerManager.AddHandler(PacketType.S2C_Joined, new JoinedPacketHandler());
         _packetHandlerManager.AddHandler(PacketType.S2C_Map, new MapPacketHandler());
         _packetHandlerManager.AddHandler(PacketType.S2C_Model, new GameModelPacketHandler());
+        _packetHandlerManager.AddHandler(PacketType.S2C_ServerInfo, new ServerInfoPacketHandler());
     }
 
     private void FixedUpdate()
     {
-        if (_client != null && _connection != null)
+        if (_client != null)
         {
             NetIncomingMessage message;
             while ((message = _client.ReadMessage()) != null)
             {
                 switch (message.MessageType)
                 {
-                    case NetIncomingMessageType.Data:
+                    case NetIncomingMessageType.DiscoveryResponse:
                         _packetHandlerManager.RunPacketHandler(message.Data, this);
+                        break;
+                    case NetIncomingMessageType.Data:
+                        if (_connection != null)
+                        {
+                            _packetHandlerManager.RunPacketHandler(message.Data, this);
+                        }
                         break;
                     default: print($"Client {nameof(message.MessageType)} -> {message.MessageType}"); break;
                 }

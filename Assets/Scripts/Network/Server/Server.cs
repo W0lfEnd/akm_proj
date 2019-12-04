@@ -126,6 +126,19 @@ public class Server : MonoBehaviour
 
         switch (message.MessageType)
         {
+            case NetIncomingMessageType.DiscoveryRequest:
+                ServerInfo serverInfo = new ServerInfo
+                {
+                    serverId = _server.Configuration.AppIdentifier + _server.UniqueIdentifier,
+                    host = _server.Configuration.LocalAddress.MapToIPv4().ToString(),
+                    port = (ushort)_server.Port,
+                    count = (byte)_server.ConnectionsCount,
+                    maxCount = _maxPlayerCount,
+                };
+                NetOutgoingMessage response = _server.CreateMessage();
+                response.Write(PacketFactory.CreatePacketByType(PacketType.S2C_ServerInfo, serverInfo).GetData());
+                _server.SendDiscoveryResponse(response, message.SenderEndPoint);
+                break;
             case NetIncomingMessageType.ConnectionApproval:
                 Debug.Log("ConnectionApproval");
                 string secretKey = message.ReadString();
@@ -137,7 +150,6 @@ public class Server : MonoBehaviour
                 {
                     message.SenderConnection.Deny();
                 }
-
                 break;
             case NetIncomingMessageType.Data:
                 Debug.Log("Data");
@@ -196,7 +208,6 @@ public class Server : MonoBehaviour
                 if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                 {
                     txtIP.text = ip.MapToIPv4().ToString();
-                    Debug.Log(ip.MapToIPv4().ToString());
                 }
             }
         }

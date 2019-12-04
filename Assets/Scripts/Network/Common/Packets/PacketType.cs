@@ -5,6 +5,7 @@
     S2C_Map = 1,
     S2C_Model = 2,
     S2C_Joined = 3,
+    S2C_ServerInfo = 4,
 
     C2S_Input = 10,
     C2S_Join = 11,
